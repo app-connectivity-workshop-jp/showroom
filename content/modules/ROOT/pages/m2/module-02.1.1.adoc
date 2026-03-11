@@ -1,71 +1,71 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Explore Service Mesh with Kiali
+== Activity: Kiali で Service Mesh を確認する
 {m2}
 
-Kiali offers a number of ways to examine the microservices which are managed by {rhossm}. This helps users to quickly evaluate the health of their service architecture.
+Kiali は {rhossm} で管理されている microservices を調査するための多数の方法を提供します。これにより、ユーザーは service アーキテクチャの健全性を迅速に評価できます。
 
-In this module we will explore just a few ways to explore the real-time metrics.
+このモジュールでは、リアルタイム metrics を確認するためのいくつかの方法を確認します。
 
-== Explore Traffic Graph
+== Traffic Graph を確認する
 
-. Click http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/graphpf/namespaces/?graphType=versionedApp&namespaces=travel-agency&duration=60&refresh=10000&layout=kiali-dagre&edges=trafficDistribution&animation=true[Kiali's Traffic Graph^, window="kiali"] to view the details of the `travel-agency` namespace. 
+. http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/graphpf/namespaces/?graphType=versionedApp&namespaces=travel-agency&duration=60&refresh=10000&layout=kiali-dagre&edges=trafficDistribution&animation=true[Kiali's Traffic Graph^, window="kiali"] をクリックして、`travel-agency` namespace の詳細を表示します。
 +
-Some parameters have been preset in this link for easier access. Refresh rate is set at `10s`, and Traffic Distribution and Traffic Animation (for a dynamic view) options have been turned ON.
+簡単にアクセスできるように、このリンクにはいくつかのパラメータが事前設定されています。リフレッシュレートは `10s` に設定されており、Traffic Distribution と Traffic Animation (動的ビュー用) オプションがオンになっています。
 
-. The *Traffic Graph* shows service interactions, request rates, and HTTP status codes. This graph helps us identify services that may have problems. In our example, everything is green and healthy! 
+. *Traffic Graph* は service の相互作用、リクエストレート、HTTP status code を表示します。このグラフは、問題がある可能性のある service を特定するのに役立ちます。この例では、すべてが緑色で健全です。
 +
-Click to view the image in full screen.
+画像をクリックしてフルスクリーンで表示します。
 +
 image:m2/kiali-graph.png[link=self, window=blank, width=100%]
 +
-NOTE: Since sidecar injection was enabled just a while ago, it may take a minute or two for  the graph to show the updated metrics.
+NOTE: Sidecar injection は少し前に有効化されたばかりなので、グラフに更新された metrics が表示されるまで 1、2 分かかる場合があります。
 
-. You can zoom into the Kiali console to get a better view of the `travel-agency` Traffic Graph.
+. Kiali console にズームインして、`travel-agency` の Traffic Graph をより見やすく表示できます。
 +
-NOTE: Wondering where all this traffic is coming from? As part of the workshop set up, a traffic simulator has also been deployed on OpenShift (｡◕‿◕｡) 
+NOTE: このトラフィックはどこから来ているのか疑問に思っていますか? workshop のセットアップの一部として、トラフィックシミュレータも OpenShift にデプロイされています (｡◕‿◕｡)
 
-== Explore Workloads
+== Workloads を確認する
 
-. From the Kiali Console, navigate to the http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/workloads?duration=60&refresh=10000&namespaces=travel-agency[Workloads^, window="kiali"] menu.
+. Kiali Console から、http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/workloads?duration=60&refresh=10000&namespaces=travel-agency[Workloads^, window="kiali"] メニューに移動します。
 +
 image:m2/kiali-workloads-travel.png[link=self, window=blank, width=100%]
 
-. Select the `travels-v1` workload to review the various metrics available.
+. `travels-v1` workload を選択して、利用可能な各種 metrics を確認します。
 
-. The *Overview tab* gives a high-level summary of the selected workload, including its health status and traffic metrics. It helps you quickly assess how a workload performs and interacts within the mesh.
+. *Overview tab* は、選択された workload の健全性ステータスやトラフィック metrics を含む高レベルの要約を提供します。これにより、workload が mesh 内でどのように動作し、相互作用しているかを迅速に評価できます。
 +
-Click to view the image in full screen.
+画像をクリックしてフルスクリーンで表示します。
 +
 image:m2/kiali-workloads-overview.png[link=self, window=blank, width=100%]
 
 
-=== Optional Activity: Detailed metrics exploration
+=== Optional Activity: 詳細な metrics の確認
 
-If time permits, you can further explore the metrics offered.
+時間があれば、提供されている metrics をさらに確認できます。
 
-.[underline]#Click to view: Detailed metrics exploration#
+.[underline]#クリックして表示: 詳細な metrics の確認#
 
 [%collapsible]
 ====
 
-. *Traffic tab* visualizes inbound and outbound traffic for the selected workload, showing real-time request rates, response codes, and latencies. 
+. *Traffic tab* は、選択された workload のインバウンドおよびアウトバウンドトラフィックを可視化し、リアルタイムのリクエストレート、レスポンスコード、レイテンシを表示します。
 +
 image:m2/kiali-workloads-traffic.png[Traffic]
 
-. *Inbound Metrics*  displays detailed telemetry for incoming traffic to the selected workload, including request rates, response times, and error rates. 
+. *Inbound Metrics* は、選択された workload への受信トラフィックに関する詳細なテレメトリを表示し、リクエストレート、レスポンスタイム、エラーレートが含まれます。
 +
 image:m2/kiali-workloads-inbound.png[Inbound Metrics]
 
-. Feel free to explore *Logs*, *Outbound Metrics*, *Envoy*, *Services*, *Istio Config*, and *Mesh* tabs as well.
+. *Logs*、*Outbound Metrics*、*Envoy*、*Services*、*Istio Config*、*Mesh* タブも自由に確認してください。
 
 ====
 
-== Summary
+== まとめ
 
-Congratulations! You've enabled automatic sidecar injection, onboarded an application into the mesh, and used Kiali to visualize and analyze service traffic.
+おめでとうございます! 自動 Sidecar injection を有効化し、アプリケーションを mesh にオンボードし、Kiali を使用して service トラフィックを可視化および分析しました。
 
-== Next steps
+== 次のステップ
 
-In the next section, you'll implement an `AuthorizationPolicy` Custom Resource Definition (CRD) in {rhossm} to explicitly control which services can talk to each other. This enforces a least-privilege model for east-west service communication.
+次のセクションでは、{rhossm} で `AuthorizationPolicy` Custom Resource Definition (CRD) を実装して、どの service が相互に通信できるかを明示的に制御します。これにより、East-West service 通信の最小権限モデルが強制されます。

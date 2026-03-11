@@ -1,45 +1,45 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Summary of this workshop
+== このワークショップのまとめ
 
-By the end of this workshop, you've helped {corp} make significant strides in modernizing their application connectivity, security, and observability across hybrid cloud environments. 
+このワークショップを終えることで、{corp}がハイブリッドクラウド環境全体にわたってアプリケーションの接続性、セキュリティ、および可観測性を近代化する上で大きな進歩を遂げるのを支援しました。
 
-Leveraging OpenShift, Red Hat Service Interconnect, OpenShift Service Mesh, and Red Hat Connectivity Link, {corp} was able to:
+OpenShift、Red Hat Service Interconnect、OpenShift Service Mesh、および Red Hat Connectivity Link を活用することで、{corp}は以下を実現できました。
 
-. *Bridge On-Prem and Cloud Workloads with Red Hat Service Interconnect*
+. *Red Hat Service Interconnect でオンプレミスと Cloud ワークロードをブリッジ*
 +
-{corp} securely connected cloud-based services running on OpenShift to on-premises databases hosted on Red hat Enterprise Linux (RHEL). Using Virtual Application Networks and environment variables, services like cars, flights, hotels, and insurances now have seamless and secure access to legacy data.
+{corp}は、OpenShift 上で動作するクラウドベースのサービスを、Red Hat Enterprise Linux (RHEL) 上でホストされているオンプレミスのデータベースに安全に接続しました。Virtual Application Networks と環境変数を使用することで、cars、flights、hotels、insurances などのサービスがレガシーデータにシームレスかつ安全にアクセスできるようになりました。
 
 
-. *Secure Microservices Communication with OpenShift Service Mesh*
+. *OpenShift Service Mesh でマイクロサービス通信をセキュア化*
 +
-With automatic sidecar injection and Kiali for observability, {corp} gained visibility and control over service interactions. Fine-grained access policies ensured that only authorized services, like discounts, were reachable by authorized services, reinforcing zero-trust principles.
+自動的な sidecar injection と可観測性のための Kiali により、{corp}はサービス間のやり取りに対する可視性と制御を獲得しました。きめ細かいアクセスポリシーにより、discounts のような承認されたサービスのみが承認されたサービスから到達可能であることを保証し、ゼロトラストの原則を強化しました。
 
 
-. *Adopt Progressive Delivery for Safer Releases*
+. *より安全なリリースのための Progressive Delivery を採用*
 +
-Using canary deployments, {corp} gradually rolled out new versions of the discounts service, closely monitoring behavior and traffic with Kiali. This reduced risk and increased confidence in production changes.
+Canary デプロイメントを使用して、{corp}は discounts サービスの新しいバージョンを段階的にロールアウトし、Kiali で動作とトラフィックを綿密に監視しました。これにより、リスクが軽減され、本番環境での変更に対する信頼性が向上しました。
 
 
-. *Simplify External Access with Red Hat Connectivity Link*
+. *Red Hat Connectivity Link で外部アクセスを簡素化*
 +
-Platform engineers implemented secure Gateways with DNS, TLS, authentication, and rate limiting. Developers defined HTTPRoutes and applied custom policies to expose services safely to external partners, without compromising core systems.
+Platform エンジニアは、DNS、TLS、認証、およびレート制限を備えた安全な Gateway を実装しました。開発者は HTTPRoute を定義し、カスタムポリシーを適用することで、コアシステムを危険にさらすことなく、外部パートナーにサービスを安全に公開しました。
 
 
-. *Enable Proactive Observability with Grafana Dashboards*
+. *Grafana Dashboard でプロアクティブな可観測性を有効化*
 +
-Tailored Grafana dashboards provided real-time visibility into API performance, latency, and system health. These insights supported operational, development, and business teams in managing and improving the application stack.
+カスタマイズされた Grafana ダッシュボードは、API パフォーマンス、レイテンシ、およびシステムヘルスに対するリアルタイムの可視性を提供しました。これらの洞察は、運用、開発、およびビジネスチームがアプリケーションスタックを管理および改善するのをサポートしました。
 
 
-With these enhancements, {corp} is better equipped to operate securely and efficiently across hybrid environments, ready for growth, innovation, and future integrations.
+これらの強化により、{corp}はハイブリッド環境全体でより安全かつ効率的に運用できるようになり、成長、イノベーション、および将来の統合に備えることができました。
 
 //TODO
 // == Next steps
 
 // You can setup this workshop in your cluster as well. git clone https://github.com/app-connectivity-workshop/acw-ansible and run the Ansible playbook
 
-== Resources
+== リソース
 
 * https://developers.redhat.com/products/service-interconnect/overview[Red Hat Service Interconnect on Red Hat Developers, window=_blank]
 

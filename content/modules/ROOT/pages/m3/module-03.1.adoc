@@ -1,50 +1,50 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Platform Engineer Workflow
+== アクティビティ: Platform Engineer ワークフロー
 {m3}
 
-To perform the section of the workshop, ensure you are logged into OpenShift within the terminal.
+ワークショップのこのセクションを実施するには、ターミナル内で OpenShift にログインしていることを確認してください。
 
-. In the *right-upper terminal*, running the following command should display `admin`
+. *右上のターミナル* で、次のコマンドを実行すると `admin` と表示されるはずです
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 oc whoami
 ----
-. If this is not the case, run the following command to log in to OpenShift.
+. そうでない場合は、次のコマンドを実行して OpenShift にログインしてください。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 oc login -u admin -p {ocp_cluster_openshift_cluster_admin_password} https://172.30.0.1:443
 ----
 
-== Workshop set up
+== ワークショップのセットアップ
 
-To ensure the module can be completed within a short timeframe, some of the components and policies have been preconfigured. 
+このモジュールを短時間で完了できるようにするため、一部のコンポーネントとポリシーは事前設定されています。
 
-. An AWS Hosted Zone (DNS domain) `travels.{ocp_cluster_workshop_main_domain}` has been created on *AWS Route 53*.
-. A Gateway resource `prod-web` referencing the DNS domain `travels.{ocp_cluster_workshop_main_domain}`
-. {rhcl} operator and a few policies (to provide DNS management in AWS DNS provider) are pre-configured.
-. A sample partner web-portal to test secure external access of the `travel-agency` core  services has been deployed
+. *AWS Route 53* に AWS Hosted Zone (DNS ドメイン) `travels.{ocp_cluster_workshop_main_domain}` が作成されています。
+. DNS ドメイン `travels.{ocp_cluster_workshop_main_domain}` を参照する Gateway リソース `prod-web`
+. {rhcl} Operator といくつかのポリシー（AWS DNS プロバイダーで DNS 管理を提供するため）が事前設定されています。
+. `travel-agency` コアサービスのセキュアな外部アクセスをテストするためのサンプルパートナー Web ポータルがデプロイされています
 
-== Explore {rhcl} set up
+== {rhcl} セットアップの確認
 
-. Navigate to {ocp_cluster_openshift_cluster_console_url}/kuadrant/overview[Connectivity Link Overview^, window='console'], and log in with username `admin` and password `{ocp_cluster_openshift_cluster_admin_password}` if prompted.
+. {ocp_cluster_openshift_cluster_console_url}/kuadrant/overview[Connectivity Link Overview^, window='console'] に移動し、プロンプトが表示されたら、ユーザー名 `admin` とパスワード `{ocp_cluster_openshift_cluster_admin_password}` でログインしてください。
 +
 image:m3/rhcl-console-view.png[link=self, window=blank, width=100%]
-. In the *Overview* section, you will notice that a *Gateway*, *Policies* (*TLSPolicy* and *DNSPolicy*), and an `echo-api` *HTTPRoute* have been pre-configured. 
+. *Overview* セクションでは、*Gateway*、*Policies* (*TLSPolicy* と *DNSPolicy*)、および `echo-api` *HTTPRoute* が事前設定されていることがわかります。
 +
 image:m3/rhcl-inital-overview.png[link=self, window=blank, width=100%]
 
 +
 [CAUTION]
 ====
-The *Status* columns for all the resources should display as `Enforced` in green. However, you may occasionally face some errors where the `Status` shows an error, similar to the screenshot below.
+すべてのリソースの *Status* 列は、緑色で `Enforced` と表示されるはずです。ただし、以下のスクリーンショットのように `Status` にエラーが表示される場合があります。
 
 image:m3/rhcl-error.png[link=self, window=blank, width=100%] 
 
-To resolve this, run the following command from the *OpenShift Terminal (upper terminal)*  to restart the Kuadrant pods to ensure all the resources return to a healthy state.
+これを解決するには、*OpenShift Terminal（上部のターミナル）* から次のコマンドを実行して Kuadrant Pod を再起動し、すべてのリソースが正常な状態に戻るようにしてください。
 [source,sh,role="execute",subs=attributes+]
 ----
 oc login -u admin -p <pwd> https://172.30.0.1:443
@@ -52,15 +52,15 @@ oc delete pods --all -n kuadrant-system
 ----
 ====
 
-=== Review the Gateway
+=== Gateway の確認
 
-NOTE: A Gateway resource defines how external traffic enters a cluster and references a DNS domain (hosted zone). 
+NOTE: Gateway リソースは、外部トラフィックがクラスタに入る方法を定義し、DNS ドメイン（Hosted Zone）を参照します。
 
-. Access the `prod-web` Gateway shown under the *Gateways* section. 
+. *Gateways* セクションに表示されている `prod-web` Gateway にアクセスしてください。
 +
-image:m3/prod-web-snippet.png[link=self, window=blank, width=100%] 
+image:m3/prod-web-snippet.png[link=self, window=blank, width=100%]
 
-. Here is a snippet of the Gateway details. Optionally, you could also navigate to the {ocp_cluster_openshift_cluster_console_url}/k8s/ns/ingress-gateway/gateway.networking.k8s.io%7Ev1%7EGateway/prod-web/yaml[YAML tab^, window=console] on the console to review it. 
+. 以下は Gateway の詳細のスニペットです。オプションとして、コンソールの {ocp_cluster_openshift_cluster_console_url}/k8s/ns/ingress-gateway/gateway.networking.k8s.io%7Ev1%7EGateway/prod-web/yaml[YAML タブ^, window=console] に移動して確認することもできます。 
 +
 [source,sh,subs=attributes+]
 ----
@@ -82,15 +82,15 @@ spec:
         mode: Terminate
 ----
 +
-<1> This is the wildcarded hostname which will handle all traffic routed through the `travels.{ocp_cluster_workshop_main_domain}` domain
-<2> A TLS Policy has been pre-created; it leverages a TLS-issuer to manage TLS certificates for the listeners defined within the Gateway.
+<1> これは、`travels.{ocp_cluster_workshop_main_domain}` ドメインを通じてルーティングされるすべてのトラフィックを処理するワイルドカードホスト名です
+<2> TLS Policy が事前に作成されています。これは TLS-issuer を活用して、Gateway 内で定義されたリスナーの TLS 証明書を管理します。
 
 
-=== Review the DNSPolicy
+=== DNSPolicy の確認
 
-NOTE: A *DNS Policy* is attached to a Gateway to enable DNS management by managing DNS records in external DNS providers - in this case, *AWS Route53*.  This policy has been pre-created, because DNS resolution for new DNS records may take time to propagate and could delay your progress in this module. 
+NOTE: *DNS Policy* は、外部 DNS プロバイダー（この場合は *AWS Route53*）で DNS レコードを管理することで DNS 管理を有効にするために Gateway にアタッチされます。このポリシーは事前に作成されています。なぜなら、新しい DNS レコードの DNS 解決には伝播に時間がかかり、このモジュールでの進行が遅れる可能性があるためです。
 
-. Here is a snippet of the DNS Policy details
+. 以下は DNS Policy の詳細のスニペットです
 +
 [source,sh, subs=attributes+]
 ----
@@ -103,29 +103,29 @@ spec:
   - name: prod-web-aws-credentials  <2>
 ----
 +
-<1> Gateway resource to which this policy is applied
-<2> DNS Provider credentials to be able to create DNS records
+<1> このポリシーが適用される Gateway リソース
+<2> DNS レコードを作成できるようにするための DNS プロバイダーの認証情報
 +
-[TIP] 
+[TIP]
 ====
-DNS Policies can be created with more complex configurations especially for hybrid cloud architectures, including default Geo Code and load balancing options. This allows traffic routing across a hybrid cloud architecture using repeatable Policy APIs configuration with a GitOps approach.
+DNS Policies は、特にハイブリッドクラウドアーキテクチャ向けに、デフォルトの Geo Code や負荷分散オプションを含む、より複雑な設定で作成できます。これにより、GitOps アプローチで繰り返し可能な Policy API 設定を使用して、ハイブリッドクラウドアーキテクチャ全体でトラフィックルーティングが可能になります。
 ====
 
-. Optionally, you could also navigate to the {ocp_cluster_openshift_cluster_console_url}/k8s/ns/ingress-gateway/kuadrant.io%7Ev1%7EDNSPolicy/prod-web-dnspolicy/yaml[prod-web-dnspolicy, window="console"] from the console.
+. オプションとして、コンソールから {ocp_cluster_openshift_cluster_console_url}/k8s/ns/ingress-gateway/kuadrant.io%7Ev1%7EDNSPolicy/prod-web-dnspolicy/yaml[prod-web-dnspolicy, window="console"] に移動することもできます。
 
 
-=== Access the `echo-api` HTTPRoute
+=== `echo-api` HTTPRoute へのアクセス
 
-NOTE: HTTPRoutes are attached to a Gateway to route all incoming traffic to appropriate backend services.
+NOTE: HTTPRoute は、すべての受信トラフィックを適切なバックエンドサービスにルーティングするために Gateway にアタッチされます。
 
-. The `echo-api` HTTPRoute has been deployed as a way for Platform Engineers to verify their setup before opening this up to developers.
-. Execute the following `curl` command in the *upper terminal* to access the `echo-api`
+. `echo-api` HTTPRoute は、プラットフォームエンジニアが開発者に公開する前にセットアップを検証する方法としてデプロイされています。
+. *上部のターミナル* で次の `curl` コマンドを実行して、`echo-api` にアクセスしてください
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 curl -k -w "%{http_code}" https://echo.travels.{ocp_cluster_workshop_main_domain} && echo
 ----
-. You will observe that this endpoint is accessible without any authentication parameters, and returns an HTTP `200` successful response status code.
+. このエンドポイントは認証パラメータなしでアクセス可能で、HTTP `200` の成功レスポンスステータスコードを返すことがわかります。
 +
 ```yaml
 {
@@ -141,19 +141,19 @@ curl -k -w "%{http_code}" https://echo.travels.{ocp_cluster_workshop_main_domain
   "uuid": "5dc42712-53c3-4f3d-94ec-9d96a501b213"
 }200
 ```
-. This is not the intended behavior and needs to be addressed. In the next step, you will create an *AuthPolicy* to secure this endpoint.
+. これは意図した動作ではなく、対処する必要があります。次のステップでは、このエンドポイントをセキュア化するために *AuthPolicy* を作成します。
 
-== Create a zero-trust AuthPolicy
+== zero-trust AuthPolicy の作成
 
-As a Platform Engineer, you will now set up a zero-trust *AuthPolicy* to secure all incoming traffic.
+Platform Engineer として、すべての受信トラフィックをセキュア化するために zero-trust *AuthPolicy* をセットアップします。
 
-NOTE: *Zero trust* a security model where every interaction begins in an untrusted state
+NOTE: *Zero trust* は、すべてのインタラクションが信頼されていない状態から始まるセキュリティモデルです
 
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new resource.
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーの *(+)* ボタンをクリックして、新しいリソースを作成します。
 +
 image:common/create-yaml.png[]
-. In the YAML editor, copy the following *AuthPolicy* CR.
+. YAML エディタで、次の *AuthPolicy* CR をコピーしてください。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -185,19 +185,19 @@ spec:
             }
 
 ----
-. This policy denies all incoming requests and sends a custom error message as part of the response.
-. Click the *Create* button at the bottom of the YAML editor
-. Scroll to the bottom of the *AuthPolicy details* page to note that the policy has been accepted and enforced
+. このポリシーは、すべての受信リクエストを拒否し、レスポンスの一部としてカスタムエラーメッセージを送信します。
+. YAML エディタの下部にある *Create* ボタンをクリックします
+. *AuthPolicy details* ページの下部までスクロールして、ポリシーが承認され適用されたことを確認してください
 +
-image:m3/gw-ap-created.png[] 
+image:m3/gw-ap-created.png[]
 
-. Test the `echo-api` HTTPRoute to test the setup so far, to ensure all requests are denied due to the zero trust policy you have set up. Execute the following `curl` command on the *upper* Terminal to access the `echo-api`
+. これまでのセットアップをテストするために `echo-api` HTTPRoute をテストし、セットアップした zero trust ポリシーによりすべてのリクエストが拒否されることを確認します。 *上部* のターミナルで次の `curl` コマンドを実行して `echo-api` にアクセスしてください
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 curl -k -w "%{http_code}" https://echo.travels.{ocp_cluster_workshop_main_domain} && echo
 ----
-. This should now display an error message instead of success. Note that this is the same error message as configured in the Gateway.
+. 成功ではなく、エラーメッセージが表示されるはずです。これは Gateway で設定したエラーメッセージと同じであることに注意してください。
 +
 ```yaml
 {
@@ -207,21 +207,21 @@ curl -k -w "%{http_code}" https://echo.travels.{ocp_cluster_workshop_main_domain
 403
 ```
 +
-This error message is caused by the zero-trust AuthPolicy applied to the Gateway to which the `API` HTTPRoute is attached. Since no other AuthPolicy is attached to `echo-api,` the Gateway's AuthPolicy is  enforced on it.
+このエラーメッセージは、`API` HTTPRoute がアタッチされている Gateway に適用された zero-trust AuthPolicy が原因です。`echo-api` には他の AuthPolicy がアタッチされていないため、Gateway の AuthPolicy が適用されます。
 +
-[WARNING] 
+[WARNING]
 ====
-There is a possibility that you may face such an error: `curl: (6) Could not resolve host: echo.travels.sandbo123.opentlc.com`. This may occur because DNS resolution can take a few minutes. Please try again in a minute or two.
+次のようなエラーが発生する可能性があります: `curl: (6) Could not resolve host: echo.travels.sandbo123.opentlc.com`。これは DNS 解決に数分かかる場合があるために発生する可能性があります。1〜2 分後に再度試してください。
 ====
 
-=== Create a default low-limit RateLimitPolicy
+=== デフォルトの低制限 RateLimitPolicy の作成
 
-NOTE: RateLimitPolicy provides rate limiting of requests to Gateways and HTTPRoutes and also offers fine-grained matching rules to apply the limits to.
+NOTE: RateLimitPolicy は、Gateway と HTTPRoute へのリクエストのレート制限を提供し、制限を適用するための詳細なマッチングルールも提供します。
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new resource.
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーの *(+)* ボタンをクリックして、新しいリソースを作成します。
 +
 image:common/create-yaml.png[]
-. In the YAML editor, copy the following RateLimitPolicy CR and click the *Create* button.
+. YAML エディタで、次の RateLimitPolicy CR をコピーして *Create* ボタンをクリックしてください。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -241,32 +241,32 @@ spec:
       - limit: 5
         window: 10s
 ----
-. Scroll to the bottom of the RateLimitPolicy details page to note that the RateLimitPolicy has been accepted and enforced.
+. RateLimitPolicy の詳細ページの下部までスクロールして、RateLimitPolicy が承認され適用されたことを確認してください。
 +
 image:m3/gw-rlp-created.png[]
 
-. Optionally, execute the following `curl` command on the *upper* Terminal to access the `echo-api` and check if the default rate limit has been applied.
+. オプションとして、*上部* のターミナルで次の `curl` コマンドを実行して `echo-api` にアクセスし、デフォルトのレート制限が適用されているかどうかを確認してください。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 for i in {1..10}; do echo "($i)"; curl -k -w "%{http_code}" https://echo.travels.{ocp_cluster_workshop_main_domain}; echo; done
 ----
 +
-You should see the **Too Many Requests - 429** message after the fifth call
+5 回目の呼び出し以降に **Too Many Requests - 429** メッセージが表示されるはずです
 
-. Navigate to {rhcl}'s {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"].
+. {rhcl} の {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"] に移動してください。
 +
-image:m3/rhcl-topology.png[link=self, window=blank, width=100%] 
-. Note that the Auth, DNS, Rate Limit, and TLS policies are all attached to the `prod-web` Gateway, and are inherited by the `echo-api` HTTRoute.
+image:m3/rhcl-topology.png[link=self, window=blank, width=100%]
+. Auth、DNS、Rate Limit、TLS ポリシーがすべて `prod-web` Gateway にアタッチされており、`echo-api` HTTRoute によって継承されていることに注意してください。
 +
-image:m3/echoapi-topology.png[link=self, window=blank, width=100%] 
+image:m3/echoapi-topology.png[link=self, window=blank, width=100%]
 
-.  Navigate to {ocp_cluster_openshift_cluster_console_url}/kuadrant/overview[Connectivity Link Overview^, window='console'] to view the updated *Gateway Traffic Analysis* showing stats around requests and errors.
+. {ocp_cluster_openshift_cluster_console_url}/kuadrant/overview[Connectivity Link Overview^, window='console'] に移動して、リクエストとエラーに関する統計を表示する更新された *Gateway Traffic Analysis* を確認してください。
 +
 image:m3/gateway-stats.png[link=self, window=blank, width=100%] 
 
-== Summary
+== まとめ
 
-. You explored the Platform Engineer's workflow, setting up the Gateway, TLS Policy, DNS Policy, and Auth Policy.
-. You validated the `echo-api` HTTPRoute and confirmed access was denied as expected.
-. Next, you'll follow the App Developer's workflow to expose a Travels Service route and apply specific policies to allow secure access to the core services endpoints
+. Platform Engineer のワークフローを確認し、Gateway、TLS Policy、DNS Policy、Auth Policy をセットアップしました。
+. `echo-api` HTTPRoute を検証し、予想どおりアクセスが拒否されたことを確認しました。
+. 次に、App Developer のワークフローに従って、Travels Service ルートを公開し、コアサービスのエンドポイントへのセキュアなアクセスを許可する特定のポリシーを適用します

@@ -2,21 +2,21 @@
 include::../style.adoc[]
 
 
-== Activity: Implement Least Privilege with Authorization Policies
+== Activity: Authorization Policies による最小権限の実装
 
 {m2}
 
-As it stands, the microservices in the `travel-agency` namespace can currently communicate freely. While this makes the development cycle easier, it poses security risks especially for services like `discounts` which applies proprietary pricing logic and handles sensitive data.
+現状では、`travel-agency` namespace 内の microservices は自由に通信できます。これにより開発サイクルは容易になりますが、特に独自の価格ロジックを適用し、機密データを扱う `discounts` のような service にとってはセキュリティリスクとなります。
 
-image:m2/travel-agency-namespace-initial.png[width=70%] 
+image:m2/travel-agency-namespace-initial.png[width=70%]
 
-In this section, you'll apply an Istio `AuthorizationPolicy` to enforce a least privilege model, allowing access to `discounts` only from the allowed backend services (`hotels`, `cars`, `flights` and `insurance` services), and not from the `travels` REST API.
+このセクションでは、Istio `AuthorizationPolicy` を適用して最小権限モデルを強制し、許可されたバックエンド service (`hotels`、`cars`、`flights`、`insurance` services) からのみ `discounts` へのアクセスを許可し、`travels` REST API からはアクセスできないようにします。
 
 
-== Review current access of *discounts* service
+== *discounts* service の現在のアクセス状況を確認する
 
-. Run the following command in the *upper terminal* to verify that you are indeed able to access the `discounts` service directly from all the services in the `travel-agency` name space. +
-This command calls the `discounts` service directly from the  pods of the services. 
+. *upper terminal* で以下のコマンドを実行して、`travel-agency` namespace 内のすべての service から `discounts` service に直接アクセスできることを検証します。+
+このコマンドは、各 service の pod から直接 `discounts` service を呼び出します。 
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -35,7 +35,7 @@ oc rsh -n travel-agency $(oc get pod -l app=cars -n travel-agency -o jsonpath='{
 oc rsh -n travel-agency $(oc get pod -l app=hotels -n travel-agency -o jsonpath='{.items[0].metadata.name}') \
   curl http://discounts.travel-agency.svc.cluster.local:8000/discounts/hello-from-hotels
 ----
-. The output verifies access of `discounts` service directly from `travels` REST API, and other services such as `cars` and `hotels`.
+. 出力は、`travels` REST API や `cars`、`hotels` などの他の service から `discounts` service に直接アクセスできることを検証します。
 +
 ```
 {"user":"hello-from-travels","discount":0.05}
@@ -45,15 +45,15 @@ oc rsh -n travel-agency $(oc get pod -l app=hotels -n travel-agency -o jsonpath=
 {"user":"hello-from-hotels","discount":0.05}
 ```
 
-== Restrict access to `discounts` service 
+== `discounts` service へのアクセスを制限する
 
-Your goal is to restrict access to the `discounts` service so that only specific backend services can access it, while preventing access from the `travels` REST API. This is achieved using an Istio Custom Resource (CR) `AuthorizationPolicy`.
+目標は、`discounts` service へのアクセスを制限し、特定のバックエンド service のみがアクセスできるようにし、`travels` REST API からのアクセスを防ぐことです。これは Istio Custom Resource (CR) `AuthorizationPolicy` を使用して実現します。
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new resource. Log in with username `admin` and password `{ocp_cluster_openshift_cluster_admin_password}` if prompted.
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーにある *(+)* ボタンをクリックして、新しいリソースを作成します。プロンプトが表示された場合は、ユーザー名 `admin`、パスワード `{ocp_cluster_openshift_cluster_admin_password}` でログインします。
 +
 image:common/create-yaml.png[]
 
-. In the YAML editor, copy the following *AuthorizationPolicy* CR, and click *Create*.
+. YAML エディタで、以下の *AuthorizationPolicy* CR をコピーして、*Create* をクリックします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -77,34 +77,34 @@ spec:
 +
 [NOTE]
 ====
-A brief description of the above `AuthorizationPolicy`
+上記の `AuthorizationPolicy` の簡単な説明
 
-* the *selector* specifies the workload which is the `discounts` service in this case
-* the *action* ALLOWs traffic based on the rules set
-* the *rules* allows requests from workloads using the service account named `discount-access-sa`
+* *selector* は workload を指定します。この場合は `discounts` service です
+* *action* は設定されたルールに基づいてトラフィックを ALLOW します
+* *rules* は `discount-access-sa` という名前の service account を使用している workload からのリクエストを許可します
 
-The `discount-access-sa` service account has already been created and added to the allowed backend services as part of the workshop set up.
+`discount-access-sa` service account は、workshop セットアップの一部としてすでに作成され、許可されたバックエンド service に追加されています。
 ====
 
 
-== Test the *AuthorizationPolicy* 
+== *AuthorizationPolicy* をテストする
 
-. Run the following command in the *upper terminal* to ensure the `travels` REST API is no longer able to access the `discounts` service.
+. *upper terminal* で以下のコマンドを実行して、`travels` REST API が `discounts` service にアクセスできなくなったことを確認します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 oc rsh -n travel-agency $(oc get pod -l app=travels -n travel-agency -o jsonpath='{.items[0].metadata.name}') \
   curl http://discounts.travel-agency.svc.cluster.local:8000/discounts/hello-from-travels && echo
 ----
-. You should no longer be able to access `discounts` service but instead get an `access denied` response.
+. `discounts` service にアクセスできなくなり、代わりに `access denied` レスポンスが返されるはずです。
 +
 ```
 RBAC: access denied
 ```
 +
-WARNING: It may take a few seconds for the AuthorizationPolicy to take effect. Please retry if you still see a success response. 
+WARNING: AuthorizationPolicy が有効になるまで数秒かかる場合があります。成功レスポンスが表示される場合は、再試行してください。
 
-. Verify that the allowed services can still access the `discounts` service by running the following command in the *upper terminal*.
+. *upper terminal* で以下のコマンドを実行して、許可された service が依然として `discounts` service にアクセスできることを検証します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -121,7 +121,7 @@ oc rsh -n travel-agency $(oc get pod -l app=hotels -n travel-agency -o jsonpath=
   curl http://discounts.travel-agency.svc.cluster.local:8000/discounts/hello-from-hotels
 ----
 +
-Output:
+出力:
 +
 ```
 {"user":"hello-from-flights","discount":0.05}
@@ -130,11 +130,11 @@ Output:
 {"user":"hello-from-hotels","discount":0.05}
 ```
 
-== Summary: 
+== まとめ
 
-In this section, you applied an Istio `AuthorizationPolicy`  to secure service-to-service communication within the `travel-agency` namespace to demonstrate how {rhossm} allows you to enforce fine-grained access control using a simple, declarative policy model. 
+このセクションでは、Istio `AuthorizationPolicy` を適用して `travel-agency` namespace 内の service 間通信を保護し、{rhossm} がシンプルで宣言的なポリシーモデルを使用してきめ細かなアクセス制御を強制できることを実証しました。
 
-== Next steps
+== 次のステップ
 
-In the next section you will leverage {rhossm} to shape and manage traffic flows using techniques like canary rollouts to safely introduce new service versions.
+次のセクションでは、{rhossm} を活用して、Canary ロールアウトなどの手法を使用してトラフィックフローを形成および管理し、新しい service バージョンを安全に導入します。
 

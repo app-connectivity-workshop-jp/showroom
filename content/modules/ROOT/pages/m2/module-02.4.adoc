@@ -1,17 +1,17 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Canary Rollout of `discounts` service
+== Activity: `discounts` service の Canary ロールアウト
 {m2}
 
-To enable canary rollout, you will run a simple script to gradually shift traffic from `v1` to `v2` in stages: 10%, 25%, 50%, 75%, and finally 100%. The script patches the `VirtualService` on the fly, and you'll observe the results in real time via Kiali and from logs in the terminal.
+Canary ロールアウトを有効にするために、シンプルなスクリプトを実行して、段階的に `v1` から `v2` へトラフィックをシフトします: 10%、25%、50%、75%、そして最後に 100%。このスクリプトは `VirtualService` をその場でパッチし、Kiali と terminal のログから結果をリアルタイムで観察します。
 
 [NOTE]
 ====
-This script is meant for illustrative and educational purposes. In a real-world production environment, organizations typically use a progressive delivery tool like *Argo Rollouts* which is included as part of OpenShift.
+このスクリプトは説明および教育目的のものです。実際の本番環境では、組織は通常、OpenShift の一部として含まれている *Argo Rollouts* のようなプログレッシブデリバリーツールを使用します。
 ====
 
-. In the *upper terminal*, run this log monitoring script which trails the logs of `v1` and `v2` discounts pods.
+. *upper terminal* で、`v1` と `v2` の discounts pods のログを追跡するこのログ監視スクリプトを実行します。
 
 +
 [source,sh,role="execute",subs=attributes+]
@@ -19,36 +19,36 @@ This script is meant for illustrative and educational purposes. In a real-world 
 sh <(curl -s https://raw.githubusercontent.com/app-connectivity-workshop/scripts/refs/heads/main/m2/canary-monitoring.sh)
 ----
 +
-You should immediately start seeing log output from discounts-v1 `[discounts/v1]`.
+discounts-v1 `[discounts/v1]` からのログ出力がすぐに表示され始めるはずです。
 +
 image:m2/log-output-pre-rollout.png[]
 
-. In the *lower terminal*, run the following canary-rollout script. This script shifts traffic from `v1` to `v2` by updating the VirtualService you created earlier,
+. *lower terminal* で、以下の canary-rollout スクリプトを実行します。このスクリプトは、先ほど作成した VirtualService を更新することで、`v1` から `v2` へトラフィックをシフトします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 sh <(curl -s https://raw.githubusercontent.com/app-connectivity-workshop/scripts/refs/heads/main/m2/canary-rollout.sh)
 ----
 +
-This will start updating the weights in the VirtualService every 20 seconds.
+これにより、20 秒ごとに VirtualService の重みの更新が開始されます。
 +
 image:m2/log-output-50-50-rollout.png[]
 
-. Once the rollout begins, you will see logs in the *upper terminal* for discount-v2 `[discount/v2]` gradually increase, while log messages from discount-v1 `[discount/v1]` decrease.
+. ロールアウトが始まると、*upper terminal* で discount-v2 `[discount/v2]` のログが徐々に増加し、discount-v1 `[discount/v1]` からのログメッセージが減少するのが確認できます。
 
-. As the script progresses, you can also visualise the deployment of the *Kiali console*. Navigate to the Kiali console using http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/graphpf/namespaces/?traffic=grpc%2CgrpcRequest%2Chttp%2ChttpRequest%2Ctcp%2CtcpSent&graphType=versionedApp&namespaces=travel-agency&duration=60&refresh=10000&animation=true&layout=kiali-dagre&idleNodes=true&edges=trafficDistribution[this link, window="kiali"] to make sure you have the right display options set in the Kiali *Traffic Graph*
-. You will begin by seeing all traffic being routed to `v1`. Click image to zoom in.
+. スクリプトが進行するにつれて、*Kiali console* のデプロイメントを視覚化することもできます。http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/graphpf/namespaces/?traffic=grpc%2CgrpcRequest%2Chttp%2ChttpRequest%2Ctcp%2CtcpSent&graphType=versionedApp&namespaces=travel-agency&duration=60&refresh=10000&animation=true&layout=kiali-dagre&idleNodes=true&edges=trafficDistribution[このリンク, window="kiali"] を使用して Kiali console に移動し、Kiali *Traffic Graph* で適切な表示オプションが設定されていることを確認します。
+. 最初はすべてのトラフィックが `v1` にルーティングされているのが確認できます。画像をクリックしてズームインします。
 +
 image:m2/canary-k-0.png[link=self, window=blank, width=100%]
 
-. Although Kiali will lag by 1 minute, you'll begin to see more and more requests routed to the `discounts-v2` pod as the script progresses. Click image to zoom in.
+. Kiali は 1 分遅れますが、スクリプトが進行するにつれて、`discounts-v2` pod にルーティングされるリクエストがますます増えていくのが確認できます。画像をクリックしてズームインします。
 +
 image:m2/canary-k-1.png[link=self, window=blank, width=100%]
 
-. And finally, all traffic is routed to `v2`. Click image to zoom in.
+. そして最後に、すべてのトラフィックが `v2` にルーティングされます。画像をクリックしてズームインします。
 +
 image:m2/canary-k-2.png[link=self, window=blank, width=100%]
-. Expected final output in the *lower terminal*
+. *lower terminal* での期待される最終出力
 +
 ```bash
 Begin Canary Rollout...
@@ -64,13 +64,13 @@ virtualservice.networking.istio.io/discounts patched
 virtualservice.networking.istio.io/discounts patched
 0% traffic routed to v1, 100% to v2
 ```
-. Press `Ctrl+C` to stop the log output in the *upper terminal*.
+. *upper terminal* のログ出力を停止するには、`Ctrl+C` を押します。
 
-Congratulations! You've just performed a progressive rollout of a new version of a microservice using weighted routing in OpenShift Service Mesh. 
+おめでとうございます! OpenShift Service Mesh で Weighted Routing を使用して、microservice の新しいバージョンのプログレッシブロールアウトを実行しました。
 
-=== Optional Activity: Reset traffic to v1
+=== Optional Activity: トラフィックを v1 にリセットする
 
-Run the following command on the *lower terminal* to reset traffic to discounts service `v1`
+*lower terminal* で以下のコマンドを実行して、discounts service `v1` へのトラフィックをリセットします。
 
 [source,sh,role="execute",subs=attributes+]
 ----

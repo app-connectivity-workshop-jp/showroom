@@ -1,22 +1,22 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Developer workflow
+== アクティビティ: Developer ワークフロー
 {m3}
 
-In this section, you will perform the role of a developer and create policies to securely expose the `travel-agency` service endpoints. This will allow partner portals to securely access {corp}'s flights, hotels, and car offerings.
+このセクションでは、開発者の役割を担い、`travel-agency` サービスエンドポイントを安全に公開するためのポリシーを作成します。これにより、パートナーポータルは {corp} のフライト、ホテル、レンタカーのサービスに安全にアクセスできるようになります。
 
-== Test access to the Travelz Partner Portal Application
+== Travelz Partner Portal アプリケーションへのアクセステスト
 
-. Access the *Travels Blue* partner portal by clicking https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[here^, console="partner"]
-. You should see a *404 error* status code because the `travel-agency` core services endpoint hasn't been exposed using an HTTPRoute to make it available to other applications/systems.
+. https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[こちら^, console="partner"] をクリックして *Travels Blue* パートナーポータルにアクセスしてください
+. `travel-agency` コアサービスエンドポイントが HTTPRoute を使用して公開されておらず、他のアプリケーション/システムで利用できないため、 *404 error* ステータスコードが表示されるはずです。
 +
 image:m3/partner-blue-404.png[link=self, window=blank, width=100%] 
 
-== Set up HTTPRoute for Travels service endpoint
+== Travels サービスエンドポイント用の HTTPRoute のセットアップ
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new HTTPRoute.
-. In the YAML editor, copy the following *HTTPRoute* CR for the `travel` REST API and click the Create button at the bottom of the YAML editor
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーの *(+)* ボタンをクリックして、新しい HTTPRoute を作成します。
+. YAML エディタで、`travel` REST API 用の次の *HTTPRoute* CR をコピーし、YAML エディタの下部にある Create ボタンをクリックしてください
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -50,24 +50,24 @@ spec:
             value: /
 ----
 
-== Test Web App again after HTTPRoute is set up
+== HTTPRoute セットアップ後の Web アプリケーションの再テスト
 
-. Refresh the Web application or access it from https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[here^, console="access Web app"]. 
-. You should see a *403 - Forbidden* error because while you have created the `travels` API's HTTPRoute, the `prod-web` Gateway's `deny-all` default policy kicks in and doesn't allow any requests to be made. We have a zero-trust auth in place!!
+. Web アプリケーションを更新するか、https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[こちら^, console="access Web app"] からアクセスしてください。
+. `travels` API の HTTPRoute を作成しましたが、`prod-web` Gateway の `deny-all` デフォルトポリシーが適用され、リクエストが許可されないため、 *403 - Forbidden* エラーが表示されるはずです。zero-trust 認証が設定されています！
 +
 image:m3/partner-blue-403.png[link=self, window=blank, width=100%] 
 
 
-. You can validate this by accessing {rhcl}'s {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"]. You will notice that the `travel-agency` HTTPRoute also inherits the Gateway's policies (just like the `echo-api` HTTRoute)
+. これは、{rhcl} の {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"] にアクセスすることで検証できます。`travel-agency` HTTPRoute も Gateway のポリシーを継承していることがわかります（`echo-api` HTTRoute と同じように）
 +
 image:m3/travel-404-policy-topology.png[link=self, window=blank, width=100%] 
 
-== Setup Authpolicy
+== Authpolicy のセットアップ
 
-Next, create an AuthPolicy targetting the HTTPRoute to allow the partner portal to access the core services securely.
+次に、パートナーポータルがコアサービスに安全にアクセスできるようにするために、HTTPRoute をターゲットとする AuthPolicy を作成します。
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new AuthPolicy for the HTTPRoute.
-. In the YAML editor, copy the following CRs, which creates an AuthPolicy along with the API Key secret needed. 
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーの *(+)* ボタンをクリックして、HTTPRoute 用の新しい AuthPolicy を作成します。
+. YAML エディタで、AuthPolicy と必要な API Key Secret を作成する次の CR をコピーしてください。 
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -107,40 +107,40 @@ stringData:
   api_key: blue
 type: Opaque
 ----
-. Click *Create* to create these resources
-. The resources are created successfully.
+. *Create* をクリックして、これらのリソースを作成します
+. リソースが正常に作成されます。
 +
-image:m3/auth-apikey-created.png[width=80%] 
+image:m3/auth-apikey-created.png[width=80%]
 +
-NOTE: For the sake of the workshop, we have chosen to authenticate using an API Key. In the real world, consider using a JWT/OAuth access token to authenticate the requests.
-.  Access {rhcl}'s {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"] once more. 
-.. You will notice that the `travel-agency` HTTPRoute is now impacted by its own AuthPolicy.
-.. You will also notice that the `prod-web` Gateway's RateLimitPolicy still affects the `travel-agency` HTTPRoute.
+NOTE: このワークショップでは、API Key を使用した認証を選択しました。実際の環境では、リクエストの認証に JWT/OAuth アクセストークンの使用を検討してください。
+. {rhcl} の {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"] にもう一度アクセスしてください。
+.. `travel-agency` HTTPRoute が独自の AuthPolicy の影響を受けるようになったことがわかります。
+.. また、`prod-web` Gateway の RateLimitPolicy が依然として `travel-agency` HTTPRoute に影響を与えていることもわかります。
 +
 image:m3/travel-ap-topology.png[] 
 
-== Test Web App again (after HTTPRoute and AuthPolicy are set up)
+== Web アプリケーションの再テスト（HTTPRoute と AuthPolicy のセットアップ後）
 
-. Refresh the https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[partner portal^, console="partner"] one more time. You should now see an `API Call is successful` message. 
+. https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[パートナーポータル^, console="partner"] をもう一度更新してください。`API Call is successful` メッセージが表示されるはずです。
 +
-image:m3/webapp-success.png[] 
-. Choose a City, a From, and a To date, and click the *Find details* button
+image:m3/webapp-success.png[]
+. City、From、To の日付を選択し、 *Find details* ボタンをクリックしてください
 +
 image:m3/webapp-see-details.png[link=self, window=blank, width=100%] 
 
-==  Test the default RateLimit Policy
-. Clicking the  *Find details* button more than 5 times.
-. Expect to see a 429 error:
+== デフォルトの RateLimit Policy のテスト
+. *Find details* ボタンを 5 回以上クリックしてください。
+. 429 エラーが表示されるはずです:
 +
 image:m3/partner-blue-429.png[link=self, window=blank, width=100%]
-. This is because of the super low rate limit configured for the Gateway.
-. Since there is no specific RateLimit Policy for the Travels service HTTPRoute, the Gateway's RateLimit Policy is applied to the HTTPRoute as well.
+. これは、Gateway に設定された非常に低いレート制限が原因です。
+. Travels サービス HTTPRoute には特定の RateLimit Policy がないため、Gateway の RateLimit Policy が HTTPRoute にも適用されます。
 
 
-== Create a new `travels` specific RateLimit Policy
+== 新しい `travels` 専用の RateLimit Policy の作成
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new RateLimitPolicy for the HTTPRoute.
-. In the YAML editor, copy the following CRs, which creates the RatLimit Policy of 20 calls per 10 seconds per user.
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーの *(+)* ボタンをクリックして、HTTPRoute 用の新しい RateLimitPolicy を作成します。
+. YAML エディタで、ユーザーごとに 10 秒あたり 20 回の呼び出しという RateLimit Policy を作成する次の CR をコピーしてください。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -162,19 +162,19 @@ spec:
       counters:
         - expression: auth.identity.userid
 ----
-. Click *Create*.
+. *Create* をクリックしてください。
 
-== Test again (after HTTPRoute, AuthPolicy, and RateLimitPolicy are set up)
+== 再テスト（HTTPRoute、AuthPolicy、RateLimitPolicy のセットアップ後）
 
-. Try accessing the details again by clicking the *Find details* button.
+. *Find details* ボタンをクリックして、詳細に再度アクセスしてみてください。
 +
-image:m3/webapp-see-details.png[] 
-. You should now be able to retrieve details without a `429 - Too Many Requests` error for up to 20 requests in a duration of 10 seconds.
-.  You will notice in the  {rhcl}'s {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"], that  the `travel-agency` HTTPRoute has its own Auth and RateLimit policies which effectively override the zero-trust and super low-limits setup on the Gateway.
+image:m3/webapp-see-details.png[]
+. 10 秒間に最大 20 回のリクエストまで、`429 - Too Many Requests` エラーなしで詳細を取得できるはずです。
+. {rhcl} の {ocp_cluster_openshift_cluster_console_url}/kuadrant/policy-topology[Policy Topology^, window="console"] では、`travel-agency` HTTPRoute が独自の Auth と RateLimit ポリシーを持ち、Gateway に設定された zero-trust と超低制限を効果的にオーバーライドしていることがわかります。
 +
 image:m3/travel-final-topo.png[link=self, window=blank, width=80%] 
 
-== Summary
+== まとめ
 
-. In this section, you played the role of a Developer and created a `travel-agency` HTTPRoute for the core services so that this can be accessed by the partner portal securely. You applied the right Auth and Rate Limit policies to the HTTPRoute thereby customising this to your specific needs in a self-service manner
-. In the next section, you will be introduced to observability and monitoring.
+. このセクションでは、Developer の役割を担い、パートナーポータルから安全にアクセスできるように、コアサービス用の `travel-agency` HTTPRoute を作成しました。HTTPRoute に適切な Auth と Rate Limit ポリシーを適用し、セルフサービス方式で特定のニーズに合わせてカスタマイズしました
+. 次のセクションでは、可観測性とモニタリングについて紹介します。

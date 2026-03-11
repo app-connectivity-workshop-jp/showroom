@@ -1,36 +1,36 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Shape Traffic with OpenShift Service Mesh
+== Activity: OpenShift Service Mesh でトラフィックを形成する
 {m2}
 
-Now that your services are locked down and secured, it's time to focus on how traffic flows between them.
+service がロックダウンされ、保護されたので、次は service 間のトラフィックフローに焦点を当てます。
 
-As a growing travel platform, the {corp} team continuously rolls out new features and improvements to core services like `discounts`, which directly impact pricing and promotions. Because these changes affect customer experience and revenue, it's crucial that updates are rolled out in a safe, observable, and reversible way.
+成長する旅行プラットフォームとして、{corp} チームは `discounts` などのコア service に新機能や改善を継続的にロールアウトしており、これらは価格設定やプロモーションに直接影響します。これらの変更は顧客体験と収益に影響するため、更新を安全で観察可能かつ元に戻せる方法でロールアウトすることが重要です。
 
-You will leverage {rhossm} to *shape and manage traffic flows* using advanced techniques like *Canary rollouts* to gradually introduce new versions of a service. This allows teams to roll out changes safely and confidently, minimizing risk while gaining real-time observability and control.
+{rhossm} を活用して、*Canary ロールアウト* などの高度な手法を使用して *トラフィックフローを形成および管理* し、新しいバージョンの service を段階的に導入します。これにより、チームはリスクを最小限に抑えながら、リアルタイムの Observability と制御を得て、安全かつ自信を持って変更をロールアウトできます。
 
-== Activity: Gradual Traffic Shifting with Weighted Routing
+== Activity: Weighted Routing による段階的なトラフィックシフト
 
-In this activity, you'll simulate a real-world *canary deployment* strategy by introducing a new version of the `discounts` service (`v2`) and gradually shifting traffic to it.
+この Activity では、`discounts` service の新しいバージョン (`v2`) を導入し、段階的にトラフィックをシフトすることで、実際の *Canary デプロイメント* 戦略をシミュレートします。
 
-NOTE: Canary deployment is a strategy where a new version (the canary) is tested before all of the old instances are replaced
+NOTE: Canary デプロイメントは、すべての古いインスタンスが置き換えられる前に新しいバージョン (Canary) がテストされる戦略です
 
 image:m2/canary.png[]
 
 
-In the next steps, you will create `DestinationRule` and `VirtualService` Istio resources. These resources control how traffic is routed between services, and are essential tools for canary deployment. They rely on the `version` label applied to service deployments to identify different versions of the services. 
+次のステップでは、`DestinationRule` と `VirtualService` Istio リソースを作成します。これらのリソースは service 間のトラフィックのルーティング方法を制御し、Canary デプロイメントに不可欠なツールです。これらは service deployments に適用された `version` ラベルに依存して、service の異なるバージョンを識別します。 
 
-== Create a *DestinationRule* 
+== *DestinationRule* を作成する
 
-You will now define a `DestinationRule` for the `discounts` service with two version subsets: `v1` and `v2`
+ここで、`discounts` service の `DestinationRule` を 2 つのバージョン subset (`v1` と `v2`) で定義します。
 
-NOTE: A DestinationRule defines policies that apply to traffic directed to a service after routing has occurred. Version specific policies can be specified by defining a named subset
+NOTE: DestinationRule は、ルーティングが発生した後に service に向けられるトラフィックに適用されるポリシーを定義します。名前付き subset を定義することで、バージョン固有のポリシーを指定できます
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new resource.
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーにある *(+)* ボタンをクリックして、新しいリソースを作成します。
 +
 image:common/create-yaml.png[]
-. In the YAML editor, paste the following *DestinationRule* CR, and click the *Create* button.
+. YAML エディタで、以下の *DestinationRule* CR を貼り付けて、*Create* ボタンをクリックします。
 
 +
 [source,sh,role="execute",subs=attributes+]
@@ -52,14 +52,14 @@ spec:
 ----
 
 
-== Apply the *VirtualService* 
+== *VirtualService* を適用する
 
-You will next create a `VirtualService` that initially sends 100% of traffic to `v1`, 0% to `v2`
+次に、最初は 100% のトラフィックを `v1` に、0% を `v2` に送信する `VirtualService` を作成します。
 
-NOTE: A  VirtualService defines a set of traffic routing rules that can route traffic based on subsets created by a DestinationRule.
+NOTE: VirtualService は、DestinationRule によって作成された subset に基づいてトラフィックをルーティングできるトラフィックルーティングルールのセットを定義します。
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new resource.
-. In the YAML editor, copy the following *VirtualService* CR and click *Create*.
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーにある *(+)* ボタンをクリックして、新しいリソースを作成します。
+. YAML エディタで、以下の *VirtualService* CR をコピーして、*Create* をクリックします。
 
 +
 [source,sh,role="execute",subs=attributes+]
@@ -88,16 +88,16 @@ spec:
       weight: 0
 ----
 
-. This VirtualService currently routes 100% of traffic to version *v1*, since *v2* is not yet deployed.
+. この VirtualService は現在、*v2* がまだデプロイされていないため、100% のトラフィックをバージョン *v1* にルーティングします。
 
-=== Deploy the `discounts-v2` Service
+=== `discounts-v2` Service をデプロイする
 
-You'll deploy a second version of the `discounts` service (`v2`) into the mesh. It will run alongside the existing `v1` version but won't receive traffic until we configure routing.
+`discounts` service の 2 番目のバージョン (`v2`) を mesh にデプロイします。これは既存の `v1` バージョンと並行して実行されますが、ルーティングを設定するまではトラフィックを受信しません。
 
-. Click the *(+)* button on the top navigation bar of {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] to create a new resource.
-. In the YAML editor, copy the following *Deployment* CR and click *Create*.
+. {ocp_cluster_openshift_cluster_console_url}[OpenShift Console^, window="console"] の上部ナビゲーションバーにある *(+)* ボタンをクリックして、新しいリソースを作成します。
+. YAML エディタで、以下の *Deployment* CR をコピーして、*Create* をクリックします。
 +
-Note the `version: v2` label attached to it under `spec.selector.matchLabels` in the YAML.
+YAML の `spec.selector.matchLabels` の下に添付された `version: v2` ラベルに注目してください。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -160,8 +160,8 @@ spec:
               value: ":8000"
 ----
 
-. Wait for the deployment to scale to 1 pod successfully.
+. Deployment が正常に 1 pod にスケールするのを待ちます。
 +
 image:m2/discounts-v2-deployment.png[]
 +
-NOTE: The `version: v2` label in the `discounts-v2` Deployment CRD is essential for enabling Istio's traffic routing.
+NOTE: `discounts-v2` Deployment CRD の `version: v2` ラベルは、Istio のトラフィックルーティングを有効にするために不可欠です。

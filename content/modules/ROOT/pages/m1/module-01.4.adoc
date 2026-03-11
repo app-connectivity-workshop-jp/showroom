@@ -1,29 +1,29 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Verify database access from services
+== アクティビティ: サービスからのデータベースアクセスを検証する
 {m1}
 
-You are now ready to  verify if the travels services is now able to access the database. As part of the workshop set up, the travels services have already been configured to connect to the {rhsi} Listener on OpenShift, which serves as a virtual endpoint for the actual on-premises database.
+これで、travels サービスがデータベースにアクセスできるかどうかを検証する準備が整いました。ワークショップのセットアップの一環として、travels サービスは OpenShift 上の {rhsi} Listener に接続するように既に設定されており、これは実際のオンプレミスデータベースの仮想エンドポイントとして機能します。
 
-. In the *OpenShift terminal (upper terminal)*, run the following curl command again to get a travel quote for the city *Prague* to check if the services are able to access the on-prem database. 
+. *OpenShift ターミナル（上部のターミナル）* で、以下の curl コマンドを再度実行して、都市 *Prague* の旅行見積もりを取得し、サービスがオンプレミスデータベースにアクセスできるかどうかを確認します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 curl travels.travel-agency.svc.cluster.local:8000/travels/Prague | jq
 ----
 
-. You should see a response with cars, hotels, flights, and insurances returned from the database indicating that the services are able to access the database.
+. データベースから返された cars、hotels、flights、insurances を含む応答が表示され、サービスがデータベースにアクセスできることを示します。
 +
-image:m1/travel-agency-response.png[] 
+image:m1/travel-agency-response.png[]
 
-== Explore Network Console
+== Network Console を確認する
 
-. Return to the https://skupper-network-observer-travel-db.{ocp_cluster_openshift_cluster_ingress_domain}/[Service Interconnect Network Console, window="network-console"] and refresh the browser tab. Verify that the RHEL server is now part of the Virtual Application Network.
+. https://skupper-network-observer-travel-db.{ocp_cluster_openshift_cluster_ingress_domain}/[Service Interconnect Network Console, window="network-console"] に戻り、ブラウザタブを更新します。RHEL サーバーが Virtual Application Network の一部になったことを確認します。
 +
 image::m1/complete_console.png[]
 
-. Feel free to check the different options in the Service Interconnect Network Console such as Services, Sites, Components, and Processes to get a better understanding of the Virtual Application Network and some traffic related analytics. 
+. Services、Sites、Components、Processes などの Service Interconnect Network Console のさまざまなオプションを自由に確認して、Virtual Application Network とトラフィック関連の分析について理解を深めてください。
 
-== Next steps for {corp}
-If and when {corp} decides to add a database replica to a different environment or cluster, they can simply add it to the existing Virtual Application Network and link it to the same listener on OpenShift. Red Hat Service Interconnect will automatically handle failover and load balancing between the database instances.
+== {corp} の次のステップ
+{corp} がデータベースレプリカを別の環境またはクラスターに追加することを決定した場合、既存の Virtual Application Network に追加して、OpenShift の同じ Listener にリンクするだけで済みます。Red Hat Service Interconnect は、データベースインスタンス間のフェイルオーバーと負荷分散を自動的に処理します。

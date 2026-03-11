@@ -1,14 +1,14 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Enable OpenShift Service Mesh 
+== アクティビティ: OpenShift Service Mesh を有効化する
 {m2}
 
-{rhossm} has been installed and configured in your cluster. You will now onboard `travel-agency` namespace to be managed by {rhossm}
+{rhossm} がクラスターにインストールおよび設定されました。これから `travel-agency` Namespace を {rhossm} で管理されるようにオンボードします
 
-=== Set up your workshop environment
+=== ワークショップ環境をセットアップする
 
-You will need to access the OpenShift console and command line terminals to apply configurations.
+設定を適用するには、OpenShift コンソールとコマンドラインターミナルにアクセスする必要があります。
 
 // . Make sure you have exited the RHEL server from the previous module. If needed, type `exit` in the lower terminal to exit out of the RHEL system.
 // +
@@ -16,33 +16,33 @@ You will need to access the OpenShift console and command line terminals to appl
 // ----
 // exit
 // ----
-. Clear the output in both terminals to make it easier to work on the next steps.
+. 次のステップで作業しやすくするために、両方のターミナルの出力をクリアします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 clear
 ----
-. Log in to both the terminals on the right side using the following command.
+. 以下のコマンドを使用して、右側の両方のターミナルにログインします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 oc login -u admin -p {ocp_cluster_openshift_cluster_admin_password} https://172.30.0.1:443
 ----
-.. Type `y` if you are prompted with `Use insecure connections? (y/n)`
-.. You should see a `Login successful` message
+.. `Use insecure connections? (y/n)` というプロンプトが表示されたら、`y` と入力します
+.. `Login successful` というメッセージが表示されます
 
-== Review `travel-agency` namespace
+== `travel-agency` Namespace を確認する
 
-Before enabling Istio sidecar proxy injection for the `travel-agency` namespace, let's review all the pods running within it. 
+`travel-agency` Namespace の Istio Sidecar Proxy インジェクションを有効にする前に、その中で実行されているすべての Pod を確認しましょう。
 
-. Run the following command in the *upper terminal*.
+. *上部のターミナル* で以下のコマンドを実行します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 oc get pods -n travel-agency
 ----
 +
-Example output:
+出力例:
 +
 ----
 NAME                             READY   STATUS    RESTARTS   AGE
@@ -53,73 +53,73 @@ hotels-v1-55556b6574-kcxv7       1/1     Running   0          112m
 insurances-v1-656cdb54f6-gcc2m   1/1     Running   0          112m
 travels-v1-647d788486-wf4nm      1/1     Running   0          112m
 ----
-. Each pod shows `1/1` under the `READY` column, indicating that each pod has a single container and it is running.  
+. 各 Pod の `READY` 列に `1/1` と表示されており、各 Pod に単一のコンテナがあり、実行中であることを示しています。
 
-. Check the namespace `travel-agency` configuration.
+. Namespace `travel-agency` の設定を確認します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 oc describe namespaces travel-agency
 ----
 +
-image:m2/oc-travel-agency.png[] 
+image:m2/oc-travel-agency.png[]
 
-. Look for the label: `istio-injection=disabled`
+. ラベル `istio-injection=disabled` を探します
 +
 [NOTE]
 ====
-`istio-injection=disabled` is the implicit default value and might not be present in the deployment. You can proceed to the next step even if it is not displayed.
+`istio-injection=disabled` は暗黙的なデフォルト値であり、デプロイメントに存在しない場合があります。表示されていなくても次のステップに進むことができます。
 ====
 
-. The Istio sidecars have not yet been deployed and the namespace has not been added to the mesh yet. Let's change that in the next step.
+. Istio Sidecar はまだデプロイされておらず、Namespace もまだメッシュに追加されていません。次のステップでそれを変更しましょう。
 
-== Add `travel-agency` namespace to the mesh
+== `travel-agency` Namespace をメッシュに追加する
 
-Onboarding a namespace to the mesh can be done manually by editing/patching labels in the `travel-agency` namespace, or by using the Kiali console.  
+Namespace をメッシュにオンボードするには、`travel-agency` Namespace のラベルを手動で編集/パッチするか、Kiali コンソールを使用します。
 
-In this module, you will use the Kiali console to enable automatic Istio injection to the namespace. Service mesh will then automatically inject proxy sidecar containers into all pods in `travel-agency` namespace that will allow the service mesh to  manage the services in the namespace.
+この Module では、Kiali コンソールを使用して Namespace への自動 Istio インジェクションを有効にします。Service Mesh は、`travel-agency` Namespace 内のすべての Pod に Proxy Sidecar コンテナを自動的にインジェクトし、Service Mesh が Namespace 内のサービスを管理できるようにします。
 
-. Navigate to the http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}[Kiali console, window="kiali"], and log in with username `admin` and password `{ocp_cluster_openshift_cluster_admin_password}` when prompted.
+. http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}[Kiali console, window="kiali"] に移動し、プロンプトが表示されたらユーザー名 `admin` とパスワード `{ocp_cluster_openshift_cluster_admin_password}` でログインします。
 +
 image:m2/kiali-overview.png[link=self, window=blank, width=100%]
 
-. Enter `travel-agency` into the *Namespace* filter, and press *Enter* to make it easier to perform actions.
+. *Namespace* フィルターに `travel-agency` を入力し、*Enter* キーを押してアクションを実行しやすくします。
 +
-image:m2/namespace-filter.png[] 
+image:m2/namespace-filter.png[]
 
-. From the `travel-agency` tile, click the kebab menu (three horizontal dots), and choose *Enable Auto Injection*.
+. `travel-agency` タイルから、ケバブメニュー（3 つの横ドット）をクリックし、*Enable Auto Injection* を選択します。
 +
 image:m2/kiali-enable-injection.png[]
-. Confirm by clicking the *Enable* button.
+. *Enable* ボタンをクリックして確認します。
 +
 image:m2/kiali-enable-injection-button.png[]
-. You are notified that the namespace has been updated.
-This action adds `travel-agency` namespace to the mesh, and also sets the namespace's Istio label to `istio-injection=enabled`. 
+. Namespace が更新されたことが通知されます。
+このアクションにより、`travel-agency` Namespace がメッシュに追加され、Namespace の Istio ラベルが `istio-injection=enabled` に設定されます。
 +
 image:m2/kiali-enabled-confirmation.png[] 
 
 
-=== Validate auto-injection to `travel-agency`
+=== `travel-agency` への自動インジェクションを検証する
 
-. In the http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/overview?duration=60&refresh=60000&namespace=travel-agency&opLabel=or[Kiali console^, window="kiali"], click on the *labels* link of the `travel-agency` card
+. http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/overview?duration=60&refresh=60000&namespace=travel-agency&opLabel=or[Kiali console^, window="kiali"] で、`travel-agency` カードの *labels* リンクをクリックします
 +
-image:m2/travel-agency-card-7labels.png[] 
-. You should now see the new label `istio-injection=enabled`. 
+image:m2/travel-agency-card-7labels.png[]
+. 新しいラベル `istio-injection=enabled` が表示されます。
 +
-image:m2/travel-agency-istioenabled.png[] 
+image:m2/travel-agency-istioenabled.png[]
 
-=== Restarting deployments to trigger sidecar
+=== デプロイメントを再起動して Sidecar をトリガーする
 
-With auto-injection enabled, you must restart the application pods to trigger sidecar injection.
+自動インジェクションが有効になったら、アプリケーション Pod を再起動して Sidecar インジェクションをトリガーする必要があります。
 
-. In the *upper terminal*, run the following command. This will automatically run the `oc get pods` command every two seconds.
+. *上部のターミナル* で、以下のコマンドを実行します。これにより、2 秒ごとに `oc get pods` コマンドが自動的に実行されます。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 watch oc get pods -n travel-agency
 ----
 
-. In the *lower terminal*, run the following command to restart the pods in the `travel-agency` namespace.
+. *下部のターミナル* で、以下のコマンドを実行して `travel-agency` Namespace の Pod を再起動します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -127,7 +127,7 @@ oc get deployments -n travel-agency -o name \
   | xargs -I{} oc rollout -n travel-agency restart {}
 ----
 +
-Expected output on the lower terminal.
+下部のターミナルの予想される出力:
 +
 ```
 deployment.apps/cars-v1 restarted
@@ -138,7 +138,7 @@ deployment.apps/insurances-v1 restarted
 deployment.apps/travels-v1 restarted
 ```
 
-. Once the applications have been restarted, the *upper terminal* will show that there are now 2 containers per pod, one of the containers being the Istio side car that has been auto-injected.
+. アプリケーションが再起動されると、*上部のターミナル* に Pod ごとに 2 つのコンテナがあることが表示されます。そのうちの 1 つは、自動インジェクトされた Istio Sidecar です。
 +
 
 ```
@@ -150,4 +150,4 @@ hotels-v1-56fc4b478d-lcbn2       2/2     Running   0          77s
 insurances-v1-5fc4b7cdf6-khkl5   2/2     Running   0          76s
 travels-v1-99798fc94-2xw74       2/2     Running   0          75s
 ```
-. You can now stop the `watch` command in the *upper terminal* with `Ctrl+C`
+. *上部のターミナル* で `Ctrl+C` を使用して `watch` コマンドを停止できます

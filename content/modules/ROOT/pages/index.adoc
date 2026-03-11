@@ -1,29 +1,29 @@
 :imagesdir: ../assets/images
 include::style.adoc[]
 
-== Safeguarding Application Connectivity for the Hybrid Cloud
+== ハイブリッドクラウド向けアプリケーション接続性の保護
 
-image:intro/hybrid-cloud.png[width=50%]  
+image:intro/hybrid-cloud.png[width=50%]
 
 
-Hybrid cloud environments offer enterprises with flexibility, scalability, and agility, but they also introduce significant connectivity and security challenges. Organizations must ensure systems and services can communicate effectively, securely and seamlessly - across on-premises, private, and public clouds
+ハイブリッドクラウド環境は、企業に柔軟性、スケーラビリティ、俊敏性を提供しますが、同時に重大な接続性とセキュリティの課題も導入します。組織は、オンプレミス、プライベートクラウド、パブリッククラウド全体で、システムとサービスが効果的、安全、かつシームレスに通信できることを確保する必要があります。
 
-Some of the key challenges include:
+主要な課題には以下が含まれます：
 
-* Fragmented app connectivity
-* Drift in configuration across multiple environments
-* Insufficient security applied to application communications
-* Mismanagement of resources
-* Lack of visibility across hybrid infrastructures
+* 断片化されたアプリケーション接続性
+* 複数環境間での設定のドリフト
+* アプリケーション通信に適用されるセキュリティの不足
+* リソースの誤管理
+* ハイブリッドインフラストラクチャ全体の可視性の欠如
 
-== Workshop objectives 
+== ワークショップの目的
 
-In this workshop, we will guide you through Red Hat's connectivity solutions that can help enterprises secure and manage hybrid cloud application connectivity. Through a real-world enterprise scenario, you will learn how to:
+このワークショップでは、企業がハイブリッドクラウドアプリケーション接続性を保護し管理するのに役立つ Red Hat の接続性ソリューションをご案内します。実際の企業シナリオを通じて、以下の方法を学びます：
 
-* Securely connect services running on different platforms and clouds, without VPNs or complex networking.
-* Safely expose and consume services both within and outside your organization.
-* Enforce authorization policies to restrict service-to-service communication even within the same cluster, without modifying application code.
-* Implement and manage consistent security policies across multiple clusters through GitOps
-* Empower developers to independently manage their application connectivity with self-service guardrails.
+* VPN や複雑なネットワーキングなしで、異なるプラットフォームやクラウド上で実行されているサービスを安全に接続する
+* 組織内外の両方でサービスを安全に公開し、利用する
+* アプリケーションコードを変更することなく、同じクラスター内でもサービス間通信を制限する認可ポリシーを適用する
+* GitOps を通じて複数のクラスター間で一貫したセキュリティポリシーを実装し管理する
+* セルフサービスのガードレールにより、開発者がアプリケーション接続性を独立して管理できるようにする
 
-Through hands-on exercises, you'll gain practical experience in using  *{rhcl}*, *{rhsi}*, and *{rhossm}* to address these challenges and improve your hybrid cloud infrastructure's security and reliability.
+ハンズオン演習を通じて、*{rhcl}*、*{rhsi}*、*{rhossm}* を使用してこれらの課題に対処し、ハイブリッドクラウドインフラストラクチャのセキュリティと信頼性を向上させる実践的な経験を得ることができます。

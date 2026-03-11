@@ -1,24 +1,24 @@
-== Congratulations on completing this module!
+== この Module の完了おめでとうございます！
 
-Congratulations! You have successfully learnt how to use {rhsi} to securely bridge on-prem and cloud workloads with minimal time and complexity. 
+おめでとうございます！最小限の時間と複雑さで {rhsi} を使用してオンプレミスとクラウドのワークロードを安全にブリッジする方法を習得しました。
 
-== Clean up
-. Log out of the **RHEL server** (lower terminal) using the following command.
+== クリーンアップ
+. 以下のコマンドを使用して **RHEL サーバー**（下部のターミナル）からログアウトします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 exit
 ----
 +
-Output:
+出力:
 +
 [source,sh]
 ----
 logout
 Connection to rhel.l64pg-1.sandbox3928.opentlc.com closed.
 ----
-. Close all the tabs except for this *instructions* tab 
+. この *instructions* タブ以外のすべてのタブを閉じます
 
-== Next steps
+== 次のステップ
 
-Proceed to the next module to learn how to secure the communication between your microservices with {rhossm}.
+次の Module に進み、{rhossm} を使用してマイクロサービス間の通信を保護する方法を学びます。

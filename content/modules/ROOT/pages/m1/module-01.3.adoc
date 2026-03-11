@@ -1,25 +1,25 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Complete the access configuration
+== アクティビティ: アクセス設定を完了する
 {m1}
 
-Recall the access token you created earlier in OpenShift. In a typical scenario, you would download and transfer this token from OpenShift directly to your RHEL server. 
+OpenShift で以前に作成した Access Token を思い出してください。通常のシナリオでは、このトークンを OpenShift から RHEL サーバーに直接ダウンロードして転送します。
 
-However, in this **workshop setting** (where you might have limited access to the local file system or download capabilities), we'll use a simple script to convert the cluster-stored access grant into a token and transfer it to the RHEL server. The cluster grant contains the grant URL and secret code to obtain a certificate within a certain expiration window and for a limited number of redemptions.
+ただし、この **ワークショップ環境** では（ローカルファイルシステムへのアクセスやダウンロード機能が制限されている可能性があるため）、クラスターに保存された Access Grant をトークンに変換し、RHEL サーバーに転送する簡単なスクリプトを使用します。クラスター Grant には、特定の有効期限内および限定された引き換え回数で証明書を取得するための Grant URL とシークレットコードが含まれています。
 
-NOTE: This script is solely for the convenience of this workshop and isn't required when using {rhsi} in production environments.
+NOTE: このスクリプトは、このワークショップの便宜のためだけのものであり、本番環境で {rhsi} を使用する場合には必要ありません。
 
-=== Transfer secure token from OpenShift to RHEL
+=== OpenShift から RHEL に安全なトークンを転送する
 
-. In the *OpenShift terminal (upper terminal)*, run the following script to convert the grant to a token and save it to a file. 
+. *OpenShift ターミナル（上部のターミナル）* で、以下のスクリプトを実行して Grant をトークンに変換し、ファイルに保存します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 curl -s https://raw.githubusercontent.com/app-connectivity-workshop/scripts/refs/heads/main/m1/convert_grant_token.sh | bash > summit_token.yaml
 ----
 
-. In the *OpenShift terminal (upper terminal)*, run the following script to transfer the token file (from the previous step) to the RHEL server.
+. *OpenShift ターミナル（上部のターミナル）* で、以下のスクリプトを実行して、トークンファイル（前のステップのもの）を RHEL サーバーに転送します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -27,16 +27,16 @@ scp summit_token.yaml lab-user@{rhel_hostname}:/home/lab-user/.local/share/skupp
 ----
 
 
-.. Type *yes* and hit enter if prompted by the message *Are you sure you want to continue connecting (yes/no/fingerprint)?*
+.. *Are you sure you want to continue connecting (yes/no/fingerprint)?* というメッセージが表示されたら、*yes* と入力して Enter キーを押します
 +
-image:m1/execute-script.png[] 
-.. Ignore the *Failed to add the host to the list of known hosts (/data/.ssh/known_hosts).* message
+image:m1/execute-script.png[]
+.. *Failed to add the host to the list of known hosts (/data/.ssh/known_hosts).* というメッセージは無視してください
 
-.. Enter the RHEL password `{rhel_ssh_password}` when prompted.
+.. プロンプトが表示されたら、RHEL パスワード `{rhel_ssh_password}` を入力します。
  
-=== Start Virtual Application Network on RHEL
+=== RHEL で Virtual Application Network を開始する
 
-. Since the token has now been transferred to the RHEL server, start the Virtual Application Network by running the command below from the *RHEL terminal (lower terminal)*. 
+. トークンが RHEL サーバーに転送されたので、*RHEL ターミナル（下部のターミナル）* から以下のコマンドを実行して Virtual Application Network を開始します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -45,28 +45,28 @@ skupper system setup
 +
 [CAUTION]
 ====
-.Click if you are facing an error - `bash: skupper: command not found`
+.`bash: skupper: command not found` というエラーが発生している場合はクリックしてください
 [%collapsible]
 =====
-You might have been logged out of the RHEL server.
+RHEL サーバーからログアウトされた可能性があります。
 
-. Log in to the RHEL server using the following command using the *lower terminal*.
+. *下部のターミナル* を使用して、以下のコマンドで RHEL サーバーにログインします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 ssh -o ServerAliveInterval=60 \
     -o ServerAliveCountMax=60 lab-user@{rhel_hostname}
 ----
-. Type `yes` and hit enter if prompted by the message `Are you sure you want to continue connecting (yes/no/fingerprint)?`
+. `Are you sure you want to continue connecting (yes/no/fingerprint)?` というメッセージが表示されたら、`yes` と入力して Enter キーを押します
 
-. Ignore the *Failed to add the host to the list of known hosts (/data/.ssh/known_hosts).* message
+. *Failed to add the host to the list of known hosts (/data/.ssh/known_hosts).* というメッセージは無視してください
 
-. Enter your password `{rhel_ssh_password}` when prompted and press *Enter*.
+. プロンプトが表示されたら、パスワード `{rhel_ssh_password}` を入力し、*Enter* キーを押します。
 
 =====
 
 ====
-. Wait for a few seconds, and you should see the following output.
+. 数秒待つと、以下の出力が表示されます。
 +
 [source,sh]
 ----

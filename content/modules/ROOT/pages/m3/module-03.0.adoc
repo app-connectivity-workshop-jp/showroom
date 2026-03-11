@@ -1,37 +1,37 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Module 3: Simplify and secure traffic management with {rhcl}
+== Module 3: {rhcl} によるトラフィック管理の簡素化とセキュア化
 {m3}
 
-With their growing popularity, {corp} would like to add new channels to their existing portals. They plan to onboard travel partners that require secure access to their flights, cars and hotel offerings.
+人気の高まりに伴い、{corp} は既存のポータルに新しいチャネルを追加したいと考えています。彼らは、フライト、レンタカー、ホテルサービスへのセキュアなアクセスを必要とする旅行パートナーのオンボーディングを計画しています。
 
-All incoming traffic from the external partner portal needs to be secured and managed. {corp} also wants to protect the endpoints by easily applying rate limiting and specific levels of access based on systems and users.
-
-
-== Solution overview
-
-To safely expose their core services to external travel partners, {corp} decides to embrace a policy-as-code approach. This approach provides a repeatable and automated way to manage the policies that can be applied to incoming north-south traffic and thereby easily define security through code.
-
-The team adopts {rhcl} which is based on  https://kuadrant.io/[Kuadrant^, window='content'] open-source project, to enable secure traffic management across multi-cluster environments.
-
-{rhcl} extends the capabilities of https://gateway-api.sigs.k8s.io/[*Gateway API*^, window='content'], the new Kubernetes standard for Ingress. It offers Policy APIs to support DNS management, TLS certificate lifecycle management, authentication, and rate limiting.
-
-image:m3/m3-soln.png[link=self, window=blank, width=100%] 
+外部のパートナーポータルからの全ての受信トラフィックは、セキュア化され管理される必要があります。{corp} は、システムやユーザーに基づいて、レート制限や特定のアクセスレベルを簡単に適用することでエンドポイントを保護したいと考えています。
 
 
-The {rhcl} policies are applied on the HTTP traffic being routed to a Service by using a Gateway and an HTTPRoute resources.
+== ソリューション概要
 
-image:m3/rhcl-policies.png[link=self, window=blank, width=100%] 
+コアサービスを外部の旅行パートナーに安全に公開するため、{corp} は policy-as-code アプローチを採用することにしました。このアプローチは、受信する North-South トラフィックに適用できるポリシーを管理する反復可能で自動化された方法を提供し、コードを通じてセキュリティを簡単に定義できるようにします。
 
-Platform Engineers can apply policies to the Gateway and thereby govern the lower levels of the network (HTTPRoute/Services), until a more specific policy is applied.
+チームは、マルチクラスタ環境全体でセキュアなトラフィック管理を可能にするため、https://kuadrant.io/[Kuadrant^, window='content'] オープンソースプロジェクトをベースにした {rhcl} を採用します。
 
-With this approach, Platform engineers and application developers can collaborate to connect, secure, and protect distributed services and applications through the right policies needed to protect exposed endpoints.
+{rhcl} は、Kubernetes の新しい Ingress 標準である https://gateway-api.sigs.k8s.io/[*Gateway API*^, window='content'] の機能を拡張します。DNS 管理、TLS 証明書のライフサイクル管理、認証、レート制限をサポートする Policy API を提供します。
 
-== Activities overview
+image:m3/m3-soln.png[link=self, window=blank, width=100%]
 
-The next sections walks you through the activities as a Platform Engineer and a Developer securing the `travel-agency` core services for third-party partner access
 
-. As a *Platform Engineer*, set up the right policies as security guardrails to the Gateway resource, and validate that the traffic flow is secured with a zero trust policy.
-. As an *Application Developer*, safely expose the `travel-agency` service route and apply specific policies to allow secure access to the core services endpoints
-. Explore Grafana dashboards for in-depth observability for business owners, platform engineers and application developers.
+{rhcl} ポリシーは、Gateway と HTTPRoute リソースを使用して、Service にルーティングされる HTTP トラフィックに適用されます。
+
+image:m3/rhcl-policies.png[link=self, window=blank, width=100%]
+
+プラットフォームエンジニアは、Gateway にポリシーを適用することで、より具体的なポリシーが適用されるまで、ネットワークの下位レベル（HTTPRoute/Services）を管理できます。
+
+このアプローチにより、プラットフォームエンジニアとアプリケーション開発者は協力して、公開されたエンドポイントを保護するために必要な適切なポリシーを通じて、分散されたサービスとアプリケーションを接続、セキュア化、保護できます。
+
+== アクティビティ概要
+
+次のセクションでは、プラットフォームエンジニアと開発者として、サードパーティパートナーアクセスのために `travel-agency` コアサービスをセキュア化するアクティビティを実施します。
+
+. *Platform Engineer* として、Gateway リソースに対するセキュリティガードレールとして適切なポリシーをセットアップし、トラフィックフローが zero trust ポリシーでセキュア化されていることを検証します。
+. *Application Developer* として、`travel-agency` サービスルートを安全に公開し、コアサービスのエンドポイントへのセキュアなアクセスを許可する特定のポリシーを適用します。
+. ビジネスオーナー、プラットフォームエンジニア、アプリケーション開発者向けの詳細な可観測性のために Grafana ダッシュボードを確認します。

@@ -1,50 +1,50 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Module 2: Secure microservices access control with {rhossm}
+== Module 2: {rhossm} によるマイクロサービスアクセス制御の保護
 {m2}
 
-{corp}'s move to a microservices-based architecture brings greater agility, but also results in increased complexity in managing how the microservices communicate with each other and stay secure. 
+{corp} のマイクロサービスベースのアーキテクチャへの移行は、より高い俊敏性をもたらしますが、マイクロサービスが互いに通信し、安全を保つ方法を管理する複雑さも増加させます。
 
-{corp} wants to apply access policies to the interaction between microservices, enable complex deployment strategies, and  monitor the microservices applications.
+{corp} は、マイクロサービス間の相互作用にアクセスポリシーを適用し、複雑なデプロイメント戦略を可能にし、マイクロサービスアプリケーションを監視したいと考えています。
 
-=== Solution overview
+=== ソリューション概要
 
-{corp} leverages {rhossm} as an easy way to set up service-to-service authentication, complex operational functions such canary releases and telemetry to understand traffic between services. 
+{corp} は、サービス間認証、Canary リリースなどの複雑な運用機能、サービス間のトラフィックを理解するためのテレメトリをセットアップする簡単な方法として {rhossm} を活用します。
 
-{rhossm} uses https://istio.io/[Istio^] as its core service mesh implementation and includes https://kiali.io/[Kiali^] to help you to configure, visualize, validate and troubleshoot your mesh! 
+{rhossm} は、コア Service Mesh 実装として https://istio.io/[Istio^] を使用し、メッシュの設定、可視化、検証、トラブルシューティングを支援するために https://kiali.io/[Kiali^] を含んでいます！
 
-image:m2/m2-arch.png[] 
+image:m2/m2-arch.png[]
 
-In this module, you will onboard the *travel-agency* namespace to the mesh. The service mesh adds a transparent layer to the microservices within this namespace without requiring any application code changes.  
+この Module では、*travel-agency* Namespace をメッシュにオンボードします。Service Mesh は、アプリケーションコードの変更を必要とせずに、この Namespace 内のマイクロサービスに透過的なレイヤーを追加します。
 
-Once the namespace is part of the service mesh, you will  use the Kiali to visualize service traffic and gain observability into your application.
-
-
-== Technical considerations
-
-To successfully implement {rhossm}, there are a few key technical factors to consider:
-
-* *Namespace and Workload Configuration*: Ensure workloads are deployed in namespaces configured for mesh participation, with sidecar injection enabled.
-
-* *mTLS and Identity*: {rhossm} uses mutual TLS (mTLS) to authenticate and encrypt service-to-service traffic. Proper certificate management and identity policies are essential.
-
-* *Authorization Policies*: Fine-grained access control can be implemented using AuthorizationPolicy CRDs to enforce least-privilege communication between services.
-
-* *Traffic Management*: Canary deployments, traffic splitting, and fault injection require well-defined routing rules using VirtualServices and DestinationRules.
-
-* *Observability Stack*: Tools like Kiali, Distributed Tracing, and Prometheus are included for service visualization, tracing, and metrics—ensure they are properly deployed and accessible.
-
-These technical foundations will ensure {corp} can fully realize the benefits of {rhossm} in a production-ready environment.
+Namespace が Service Mesh の一部になると、Kiali を使用してサービストラフィックを可視化し、アプリケーションへの Observability を得ることができます。
 
 
-=== Activities Overview:
+== 技術的考慮事項
 
-In this module, you'll get hands-on experience with OpenShift Service Mesh. 
+{rhossm} を正常に実装するには、いくつかの重要な技術的要因を考慮する必要があります：
 
-* Learn how OpenShift Service Mesh works by exploring its main parts. You'll see how it gives you visibility and control over how services talk to each other.
+* *Namespace とワークロード設定*: ワークロードが、Sidecar インジェクションが有効になっている、メッシュ参加用に設定された Namespace にデプロイされていることを確認します。
 
-* Use zero trust security principles to make sure only the right services can access sensitive backends — helping protect your applications from unwanted access.
+* *mTLS とアイデンティティ*: {rhossm} は、サービス間トラフィックの認証と暗号化に Mutual TLS (mTLS) を使用します。適切な証明書管理とアイデンティティポリシーが不可欠です。
 
-* Control how traffic flows between service versions so you can gradually roll out changes, reduce deployment risks, and test updates safely in production.
+* *認可ポリシー*: AuthorizationPolicy CRD を使用して、サービス間の最小権限通信を強制する細かいアクセス制御を実装できます。
+
+* *トラフィック管理*: Canary デプロイメント、トラフィック分割、フォールトインジェクションには、VirtualServices と DestinationRules を使用した明確に定義されたルーティングルールが必要です。
+
+* *Observability スタック*: Kiali、Distributed Tracing、Prometheus などのツールがサービスの可視化、トレーシング、メトリクスのために含まれています。これらが適切にデプロイされ、アクセス可能であることを確認してください。
+
+これらの技術的基盤により、{corp} は本番環境で {rhossm} のメリットを完全に実現できます。
+
+
+=== アクティビティ概要:
+
+この Module では、OpenShift Service Mesh を使用したハンズオン体験ができます。
+
+* OpenShift Service Mesh の主要部分を探索して、その仕組みを学びます。サービスが互いにどのように通信するかについての可視性と制御がどのように提供されるかを確認します。
+
+* ゼロトラストセキュリティの原則を使用して、適切なサービスのみが機密性の高いバックエンドにアクセスできるようにし、不要なアクセスからアプリケーションを保護します。
+
+* サービスバージョン間のトラフィックフローを制御して、変更を段階的にロールアウトし、デプロイメントリスクを軽減し、本番環境で安全に更新をテストできるようにします。
 

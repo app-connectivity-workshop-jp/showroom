@@ -1,18 +1,18 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Activity: Set up {rhsi} on RHEL
+== アクティビティ: RHEL で {rhsi} をセットアップする
 {m1}
 
-Similar to the OpenShift site, you will set up the site and routers on RHEL - but in this activity you will use the {rhsi} command line interface.
+OpenShift Site と同様に、RHEL で Site とルーターをセットアップしますが、このアクティビティでは {rhsi} コマンドラインインターフェースを使用します。
 
-=== Login in to RHEL and validate the environment
+=== RHEL にログインして環境を検証する
 
-. You need to SSH into the on-prem RHEL server using the built-in Terminal to the **lower right** of the page. 
+. ページの **右下** にある組み込みターミナルを使用して、オンプレミス RHEL サーバーに SSH 接続する必要があります。
 +
 image::m1/lower_terminal.png[]
 
-. Log in to the RHEL server using the following command using the *lower terminal*.
+. *下部のターミナル* を使用して、以下のコマンドで RHEL サーバーにログインします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -21,51 +21,51 @@ ssh -o ServerAliveInterval=60 \
 ----
 
 
-. Type `yes` and hit enter if prompted by the message `Are you sure you want to continue connecting (yes/no/fingerprint)?`
+. `Are you sure you want to continue connecting (yes/no/fingerprint)?` というメッセージが表示されたら、`yes` と入力して Enter キーを押します
 
-. Ignore the *Failed to add the host to the list of known hosts (/data/.ssh/known_hosts).* message
+. *Failed to add the host to the list of known hosts (/data/.ssh/known_hosts).* というメッセージは無視してください
 
-. Enter your password `{rhel_ssh_password}` when prompted and press *Enter*.
+. プロンプトが表示されたら、パスワード `{rhel_ssh_password}` を入力し、*Enter* キーを押します。
 +
-You should now be logged into the RHEL server. Let's see how we can set up a link between the database and the OpenShift cluster.
+これで RHEL サーバーにログインしました。データベースと OpenShift クラスター間のリンクをセットアップする方法を見てみましょう。
 +
 image::m1/rhel_user.png[]
 
-. Enter the following command to clear the *RHEL terminal (lower terminal)*
+. 以下のコマンドを入力して *RHEL ターミナル（下部のターミナル）* をクリアします
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 clear
 ----
 
-. To verify if the database is running on the **RHEL server**, run the following command from the *RHEL terminal (lower terminal)*.
+. **RHEL サーバー** でデータベースが実行されているかどうかを確認するには、*RHEL ターミナル（下部のターミナル）* から以下のコマンドを実行します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 podman ps
 ----
 
-. You should see an output like the one below.
+. 以下のような出力が表示されます。
 +
 [source,sh,subs=attributes+]
 ----
-CONTAINER ID   IMAGE        COMMAND   CREATED   STATUS    PORTS    NAMES 
+CONTAINER ID   IMAGE        COMMAND   CREATED   STATUS    PORTS    NAMES
 3d12164dd54b  quay.io/kiali/demo_travels_mysqldb:v1  --default-authent...  4 hours ago  Up 4 hours  0.0.0.0:3306->3306/tcp, 3306/tcp, 33060/tcp  travels-mysqldb
 ----
 +
 [CAUTION]
 ====
-.Click here if the output returns an empty list
+.出力が空のリストを返す場合はここをクリックしてください
 [%collapsible]
 =====
-If the output returns an empty list, it indicates that the database is not running on the RHEL server. Run the following command in the *lower terminal* to restart the database. 
+出力が空のリストを返す場合は、RHEL サーバーでデータベースが実行されていないことを示しています。 *下部のターミナル* で以下のコマンドを実行してデータベースを再起動します。
 
 [source,sh,role="execute",subs=attributes+]
 ----
 podman restart travels-mysqldb
 ----
 
-Run the following command again to validate that the database is indeed running now.
+以下のコマンドを再度実行して、データベースが実際に実行されていることを検証します。
 [source,sh,role="execute",subs=attributes+]
 ----
 podman ps
@@ -73,9 +73,9 @@ podman ps
 =====
 ====
 
-=== Create {rhsi} Site
+=== {rhsi} Site を作成する
 
-. In the *RHEL terminal (lower terminal)*, run the following command to create a site. Similar to the OpenShift site, this will set up the VAN routers.
+. *RHEL ターミナル（下部のターミナル）* で、以下のコマンドを実行して Site を作成します。OpenShift Site と同様に、これにより VAN ルーターがセットアップされます。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -83,33 +83,33 @@ export SKUPPER_PLATFORM=podman
 skupper site create rhel
 ----
 
-. You should see the following output.
+. 以下の出力が表示されます。
 +
 [source,sh,subs=attributes+]
 ----
 File written to /home/lab-user/.local/share/skupper/namespaces/default/input/resources/sites/rhel.yaml
 ----
 
-=== Create a connector
+=== Connector を作成する
 
-Next, let's learn what a connector is, and create one.
+次に、Connector とは何かを学び、作成してみましょう。
 
 [.concept]
-.What is a connector?
+.Connector とは何ですか？
 ****
-A connector links a local workload to listeners in remote sites using routing keys. On Kubernetes, it typically uses a pod selector; on Docker, Podman, and Linux, it uses host and port specifications. The routing key is a string identifier that binds the connector to matching listeners in remote sites.
+Connector は、ルーティングキーを使用してローカルワークロードをリモート Site の Listener にリンクします。Kubernetes では通常 Pod Selector を使用し、Docker、Podman、Linux ではホストとポートの仕様を使用します。ルーティングキーは、Connector をリモート Site の一致する Listener にバインドする文字列識別子です。
 ****
 image::m1/connector_image.png[]
 
 
-. In the *RHEL terminal (lower terminal)*, run the following command to create a connector for the database.
+. *RHEL ターミナル（下部のターミナル）* で、以下のコマンドを実行してデータベース用の Connector を作成します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
 skupper connector create mysqldb 3306 --host 127.0.0.1 -r appconn
 ----
 
-. You should see the following output.
+. 以下の出力が表示されます。
 +
 [source,sh,subs=attributes+]
 ----
@@ -117,17 +117,17 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 ----
 
 
-== Visualise set up on {rhsi} Network Console
+== {rhsi} Network Console でセットアップを可視化する
 
-Before proceeding to the final step of creating the Virtual Application Network, navigate to the https://skupper-network-observer-travel-db.{ocp_cluster_openshift_cluster_ingress_domain}/[Service Interconnect Network Console, window="network-console"] to visualize the *Virtual Application Network* based on the configuration you've set up so far.
+Virtual Application Network を作成する最終ステップに進む前に、https://skupper-network-observer-travel-db.{ocp_cluster_openshift_cluster_ingress_domain}/[Service Interconnect Network Console, window="network-console"] に移動して、これまでにセットアップした設定に基づいて *Virtual Application Network* を可視化します。
 
-. Click on *Log in with OpenShift*, and log in with username `admin` and password `{ocp_cluster_openshift_cluster_admin_password}` if prompted.
+. *Log in with OpenShift* をクリックし、プロンプトが表示されたらユーザー名 `admin` とパスワード `{ocp_cluster_openshift_cluster_admin_password}` でログインします。
 
-. Click *Allow selected permissions*.
+. *Allow selected permissions* をクリックします。
 +
 image::m1/allow_permission.png[]
 
-. You will only be able to see the OpenShift cluster (travel-db namespace) for the moment. This is because the RHEL on-prem machine is not yet part of the Virtual Application Network.
+. 現時点では、OpenShift クラスター（travel-db Namespace）のみが表示されます。これは、RHEL オンプレミスマシンがまだ Virtual Application Network の一部ではないためです。
 +
 image::m1/network-console-ocp.png[]
 
