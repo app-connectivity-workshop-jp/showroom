@@ -1,10 +1,33 @@
-Hybrid cloud environments offer flexibility and scalability, but they also introduce significant security and connectivity challenges. 
+= ハイブリッドクラウド向けアプリケーション接続性の保護 - 日本語版
 
-In this workshop, we'll guide you through the process of safeguarding and connecting your hybrid cloud environments with Red Hat. You'll learn how to:
+このリポジトリは、Red Hat のハイブリッドクラウド環境におけるアプリケーション接続性を保護するワークショップの日本語翻訳版です。
 
-* Implement and manage consistent security policies across multiple clusters.
-* Empower developers to independently manage their application connectivity with self-service guardrails.
-* Connect services running on different platforms and clouds, as well as infrastructure that's inaccessible over the network.
-* Expose and consume services both within and outside your organization.
+== 概要
 
-Through hands-on exercises, you'll gain practical experience in using Red Hat Connectivity Link, Red Hat Service Interconnect, and Red Hat OpenShift Service Mesh to address these challenges and improve your hybrid cloud infrastructure's security and reliability.
+ハイブリッドクラウド環境は、企業に柔軟性、スケーラビリティ、俊敏性を提供しますが、同時に重大な接続性とセキュリティの課題も導入します。
+
+このワークショップでは、Red Hat の接続性ソリューションを使用してハイブリッドクラウド環境を保護し接続するプロセスをご案内します。以下の内容を学びます：
+
+* VPN や複雑なネットワーキングなしで、異なるプラットフォームやクラウド上で実行されているサービスを安全に接続する
+* 組織内外の両方でサービスを安全に公開し、利用する
+* アプリケーションコードを変更することなく、同じクラスター内でもサービス間通信を制限する認可ポリシーを適用する
+* GitOps を通じて複数のクラスター間で一貫したセキュリティポリシーを実装し管理する
+* セルフサービスのガードレールにより、開発者がアプリケーション接続性を独立して管理できるようにする
+
+ハンズオン演習を通じて、Red Hat Connectivity Link、Red Hat Service Interconnect、Red Hat OpenShift Service Mesh を使用してこれらの課題に対処し、ハイブリッドクラウドインフラストラクチャのセキュリティと信頼性を向上させる実践的な経験を得ることができます。
+
+== ワークショップの構成
+
+このワークショップは 3 つの Module で構成されています：
+
+* *Module 1*: Red Hat Service Interconnect を使用して、OpenShift 上のコアサービスとオンプレミスデータベース（RHEL 上）とのシームレスな通信を実現
+* *Module 2*: Red Hat OpenShift Service Mesh を使用して、サービス間の細かいアクセス制御、トラフィック管理、複雑なデプロイメント戦略、Observability を実装
+* *Module 3*: Red Hat Connectivity Link を使用して、豊富なポリシー API を通じてトラフィックフローを管理および保護
+
+== 技術スタック
+
+* Red Hat OpenShift
+* Red Hat Service Interconnect
+* Red Hat OpenShift Service Mesh
+* Red Hat Connectivity Link
+* Red Hat Enterprise Linux (RHEL)
