@@ -15,7 +15,7 @@ image:m2/travel-agency-namespace-initial.png[width=70%]
 
 == *discounts* service の現在のアクセス状況を確認する
 
-. *upper terminal* で以下のコマンドを実行して、`travel-agency` namespace 内のすべての service から `discounts` service に直接アクセスできることを検証します。+
+. *上部のターミナル* で以下のコマンドを実行して、`travel-agency` namespace 内のすべての service から `discounts` service に直接アクセスできることを検証します。+
 このコマンドは、各 service の pod から直接 `discounts` service を呼び出します。 
 +
 [source,sh,role="execute",subs=attributes+]
@@ -89,7 +89,7 @@ spec:
 
 == *AuthorizationPolicy* をテストする
 
-. *upper terminal* で以下のコマンドを実行して、`travels` REST API が `discounts` service にアクセスできなくなったことを確認します。
+. *上部のターミナル* で以下のコマンドを実行して、`travels` REST API が `discounts` service にアクセスできなくなったことを確認します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -104,7 +104,7 @@ RBAC: access denied
 +
 WARNING: AuthorizationPolicy が有効になるまで数秒かかる場合があります。成功レスポンスが表示される場合は、再試行してください。
 
-. *upper terminal* で以下のコマンドを実行して、許可された service が依然として `discounts` service にアクセスできることを検証します。
+. *上部のターミナル* で以下のコマンドを実行して、許可された service が依然として `discounts` service にアクセスできることを検証します。
 +
 [source,sh,role="execute",subs=attributes+]
 ----

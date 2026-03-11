@@ -10,7 +10,7 @@ include::../style.adoc[]
 
 設定を適用するには、OpenShift コンソールとコマンドラインターミナルにアクセスする必要があります。
 
-// . Make sure you have exited the RHEL server from the previous module. If needed, type `exit` in the lower terminal to exit out of the RHEL system.
+// . Make sure you have exited the RHEL server from the previous module. If needed, type `exit` in the 下部のターミナル to exit out of the RHEL system.
 // +
 // [source,sh,role="execute",subs=attributes+]
 // ----

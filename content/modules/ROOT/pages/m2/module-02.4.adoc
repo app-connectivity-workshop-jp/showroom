@@ -11,7 +11,7 @@ Canary ロールアウトを有効にするために、シンプルなスクリ�
 このスクリプトは説明および教育目的のものです。実際の本番環境では、組織は通常、OpenShift の一部として含まれている *Argo Rollouts* のようなプログレッシブデリバリーツールを使用します。
 ====
 
-. *upper terminal* で、`v1` と `v2` の discounts pods のログを追跡するこのログ監視スクリプトを実行します。
+. *上部のターミナル* で、`v1` と `v2` の discounts pods のログを追跡するこのログ監視スクリプトを実行します。
 
 +
 [source,sh,role="execute",subs=attributes+]
@@ -23,7 +23,7 @@ discounts-v1 `[discounts/v1]` からのログ出力がすぐに表示され始�
 +
 image:m2/log-output-pre-rollout.png[]
 
-. *lower terminal* で、以下の canary-rollout スクリプトを実行します。このスクリプトは、先ほど作成した VirtualService を更新することで、`v1` から `v2` へトラフィックをシフトします。
+. *下部のターミナル* で、以下の canary-rollout スクリプトを実行します。このスクリプトは、先ほど作成した VirtualService を更新することで、`v1` から `v2` へトラフィックをシフトします。
 +
 [source,sh,role="execute",subs=attributes+]
 ----
@@ -34,7 +34,7 @@ sh <(curl -s https://raw.githubusercontent.com/app-connectivity-workshop/scripts
 +
 image:m2/log-output-50-50-rollout.png[]
 
-. ロールアウトが始まると、*upper terminal* で discount-v2 `[discount/v2]` のログが徐々に増加し、discount-v1 `[discount/v1]` からのログメッセージが減少するのが確認できます。
+. ロールアウトが始まると、*上部のターミナル* で discount-v2 `[discount/v2]` のログが徐々に増加し、discount-v1 `[discount/v1]` からのログメッセージが減少するのが確認できます。
 
 . スクリプトが進行するにつれて、*Kiali console* のデプロイメントを視覚化することもできます。 http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/graphpf/namespaces/?traffic=grpc%2CgrpcRequest%2Chttp%2ChttpRequest%2Ctcp%2CtcpSent&graphType=versionedApp&namespaces=travel-agency&duration=60&refresh=10000&animation=true&layout=kiali-dagre&idleNodes=true&edges=trafficDistribution[このリンク, window="kiali"] を使用して Kiali console に移動し、Kiali *Traffic Graph* で適切な表示オプションが設定されていることを確認します。
 . 最初はすべてのトラフィックが `v1` にルーティングされているのが確認できます。画像をクリックしてズームインします。
@@ -48,7 +48,7 @@ image:m2/canary-k-1.png[link=self, window=blank, width=100%]
 . そして最後に、すべてのトラフィックが `v2` にルーティングされます。画像をクリックしてズームインします。
 +
 image:m2/canary-k-2.png[link=self, window=blank, width=100%]
-. *lower terminal* での期待される最終出力
+. *下部のターミナル* での期待される最終出力
 +
 ```bash
 Begin Canary Rollout...
@@ -64,13 +64,13 @@ virtualservice.networking.istio.io/discounts patched
 virtualservice.networking.istio.io/discounts patched
 0% traffic routed to v1, 100% to v2
 ```
-. *upper terminal* のログ出力を停止するには、`Ctrl+C` を押します。
+. *上部のターミナル* のログ出力を停止するには、`Ctrl+C` を押します。
 
 おめでとうございます! OpenShift Service Mesh で Weighted Routing を使用して、microservice の新しいバージョンのプログレッシブロールアウトを実行しました。
 
 === Optional Activity: トラフィックを v1 にリセットする
 
-*lower terminal* で以下のコマンドを実行して、discounts service `v1` へのトラフィックをリセットします。
+*下部のターミナル* で以下のコマンドを実行して、discounts service `v1` へのトラフィックをリセットします。
 
 [source,sh,role="execute",subs=attributes+]
 ----
