@@ -28,7 +28,7 @@ NOTE: このトラフィックはどこから来ているのか疑問に思っ�
 
 == Workloads を確認する
 
-. Kiali Console から、http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/workloads?duration=60&refresh=10000&namespaces=travel-agency[Workloads^, window="kiali"] メニューに移動します。
+. Kiali Console から、 http://kiali-istio-system.{ocp_cluster_openshift_cluster_ingress_domain}/console/workloads?duration=60&refresh=10000&namespaces=travel-agency[Workloads^, window="kiali"] メニューに移動します。
 +
 image:m2/kiali-workloads-travel.png[link=self, window=blank, width=100%]
 

@@ -52,7 +52,7 @@ spec:
 
 == HTTPRoute セットアップ後の Web アプリケーションの再テスト
 
-. Web アプリケーションを更新するか、https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[こちら^, console="access Web app"] からアクセスしてください。
+. Web アプリケーションを更新するか、 https://travels-blue-ui-travel-web.{ocp_cluster_openshift_cluster_ingress_domain}/[こちら^, console="access Web app"] からアクセスしてください。
 . `travels` API の HTTPRoute を作成しましたが、`prod-web` Gateway の `deny-all` デフォルトポリシーが適用され、リクエストが許可されないため、 *403 - Forbidden* エラーが表示されるはずです。zero-trust 認証が設定されています！
 +
 image:m3/partner-blue-403.png[link=self, window=blank, width=100%] 
