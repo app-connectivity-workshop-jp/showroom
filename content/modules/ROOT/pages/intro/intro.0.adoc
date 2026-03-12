@@ -67,5 +67,5 @@ You can copy the command with the clipboard icon on the right'
 image:intro/grab-handles.png[link=self, window=blank, width=100%]
 * ほとんどの画像、特に大きなスクリーンショットは、クリックするとフルスクリーンで開きます。画像の詳細が不明瞭な場合は、クリックしてフルスクリーンで表示してください。
 
-NOTE: このワークショップで使用されている *{corp}* アプリケーションは、https://kiali.io/docs/tutorials/travels/[Kiali Travel Demo Tutorial^] に基づいています
+NOTE: このワークショップで使用されている *{corp}* アプリケーションは、 https://kiali.io/docs/tutorials/travels/[Kiali Travel Demo Tutorial^] に基づいています
 
