@@ -119,7 +119,7 @@ File written to /home/lab-user/.local/share/skupper/namespaces/default/input/res
 
 == {rhsi} Network Console でセットアップを可視化する
 
-Virtual Application Network を作成する最終ステップに進む前に、https://skupper-network-observer-travel-db.{ocp_cluster_openshift_cluster_ingress_domain}/[Service Interconnect Network Console, window="network-console"] に移動して、これまでにセットアップした設定に基づいて *Virtual Application Network* を可視化します。
+Virtual Application Network を作成する最終ステップに進む前に、 https://skupper-network-observer-travel-db.{ocp_cluster_openshift_cluster_ingress_domain}/[Service Interconnect Network Console, window="network-console"] に移動して、これまでにセットアップした設定に基づいて *Virtual Application Network* を可視化します。
 
 . *Log in with OpenShift* をクリックし、プロンプトが表示されたらユーザー名 `admin` とパスワード `{ocp_cluster_openshift_cluster_admin_password}` でログインします。
 
