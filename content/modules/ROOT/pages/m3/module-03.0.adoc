@@ -13,7 +13,7 @@ include::../style.adoc[]
 
 コアサービスを外部の旅行パートナーに安全に公開するため、{corp} は policy-as-code アプローチを採用することにしました。このアプローチは、受信する North-South トラフィックに適用できるポリシーを管理する反復可能で自動化された方法を提供し、コードを通じてセキュリティを簡単に定義できるようにします。
 
-チームは、マルチクラスタ環境全体でセキュアなトラフィック管理を可能にするため、　https://kuadrant.io/[Kuadrant^, window='content'] オープンソースプロジェクトをベースにした {rhcl} を採用します。
+チームは、マルチクラスタ環境全体でセキュアなトラフィック管理を可能にするため、 https://kuadrant.io/[Kuadrant^, window='content'] オープンソースプロジェクトをベースにした {rhcl} を採用します。
 
 {rhcl} は、Kubernetes の新しい Ingress 標準である https://gateway-api.sigs.k8s.io/[*Gateway API*^, window='content'] の機能を拡張します。DNS 管理、TLS 証明書のライフサイクル管理、認証、レート制限をサポートする Policy API を提供します。
 
